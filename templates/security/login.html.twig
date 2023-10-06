@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {% if error %}
+    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="POST" class="form-style">
+        <div class="form-floating mb-3">
+            <input type="email" name="email" class="form-control" id="inputEmail" placeholder="name@example.com"
+                value="{{ last_username }}" autocomplete="email" autofocus required>
+            <label for="inputEmail">Adresse email</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="●●●●●●●●●●"
+                value="{{ last_username }}" autocomplete="current-password" autofocus required>
+            <label for="inputPassword">Mot de passe</label>
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" id="_remember_me" name="_remember_me" checked />
+            <label for="_remember_me">Se souvenir de moi</label>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <div class="d-flex">
+            <button class="btn btn-sm btn-primary mx-auto w-50" type="submit">Connexion</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheet %}main.css{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ airport.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ airport.name }}</td>
+            </tr>
+            <tr>
+                <th>IataCode</th>
+                <td>{{ airport.iataCode }}</td>
+            </tr>
+            <tr>
+                <th>Zone</th>
+                <td>{{ airport.zone }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('app_admin_airport_index') }}">back to list</a>
+</section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheet %}main.css{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNumber</th>
+                <td>{{ user.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Picture</th>
+                <td><img src="{{ user.picture == 'defaultPicture.png' ? asset('common/' ~ user.picture) : asset('images/' ~ user.picture) }}"
+                        alt="" height="50"></td>
+            </tr>
+            <tr>
+                <th>Zone</th>
+                <td>{{ user.zone }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ user.gender }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('app_admin_user_index') }}">back to list</a>
+</section>
+
+{% endblock %}

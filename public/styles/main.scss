@@ -1,0 +1,196 @@
+@import 'var.scss';
+@import 'fonctions.scss';
+@import 'bootstrap.scss';
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+
+* {
+    font-family: 'Nunito', sans-serif !important;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: $gris;
+}
+
+header {
+    background-color: $bleu;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 0px 2px 10px $bleu;
+
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        img {
+            height: 3.5rem;
+            background-color: $white;
+            padding: 2px;
+            border-radius: 50%;
+        }
+
+        a {
+            text-decoration: none;
+            color: $gris;
+        }
+
+        .menu-burger {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+
+            &-btn {
+                background-color: lighten($color: $bleu, $amount: 5);
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: x-large;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+
+                &:hover {
+                    background-color: lighten($color: $bleu, $amount: 15);
+                }
+            }
+        }
+    }
+}
+
+.menu {
+
+
+
+    #burger {
+        display: none;
+
+
+        &:checked+.menu-links {
+            display: block;
+        }
+    }
+
+    &-links {
+        display: none;
+        background-color: $midbleu;
+        position: fixed;
+        top: 4rem;
+        width: 100vw;
+        z-index: 1000;
+
+        div {
+            display: flex;
+            flex-direction: column;
+
+            details {
+                color: $white;
+                display: flex;
+                flex-direction: column;
+            }
+
+            a {
+                color: $white;
+                text-decoration: none;
+
+                &:hover {
+                    background-color: $bleu;
+                }
+            }
+        }
+    }
+}
+
+main {
+    margin-top: 60px;
+    padding: 30px 0;
+    min-height: calc(100vh);
+
+    h1 {
+        margin-bottom: 25px;
+        font-size: xx-large;
+        text-align: center;
+    }
+
+    section {
+        margin-top: 20px;
+
+        .msg-y {
+            @include message($vert, $vert-c);
+        }
+
+        .msg-n {
+            @include message($rouge, $rouge-c);
+        }
+
+        form.form-style {
+            background-color: darken($color: $gris, $amount: 15);
+            border: 1px solid darken($color: $gris, $amount: 20);
+            border-radius: 1rem;
+            margin: 0 auto;
+            padding: 1rem;
+            width: 50%;
+        }
+
+        table {
+            background-color: white;
+            width: 100%;
+            border: 1px solid darken($color: $gris, $amount: 20);
+
+            thead {
+                background-color: lighten($bleu, 30);
+
+                tr {
+                    text-align: center;
+                    vertical-align: middle;
+                    border-bottom: 1px solid lighten($bleu, 30);
+
+                    th {
+                        padding: 10px 0;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    text-align: center;
+                    vertical-align: middle;
+
+                    &:hover {
+                        background-color: lighten($bleu, 50);
+                    }
+
+                    td {
+                        padding: 8px 0;
+                        cursor: default;
+                    }
+                }
+            }
+        }
+    }
+
+    hr {
+        margin: 2rem;
+    }
+}
+
+footer {
+    display: flex;
+    align-items: flex-end;
+    text-align: center;
+    color: $white;
+    background-color: $bleu;
+    height: 100px;
+
+    a {
+        color: $gris;
+        text-decoration: none;
+    }
+}

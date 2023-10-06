@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheet %}main.css{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    <a href="{{ path('app_admin_user_index') }}" class="bi bi-person-circle">Voiturier</a>
+    <a href="{{ path('app_admin_airport_index') }}" class="">Aéroport</a>
+    <a href="{{ path('app_admin_parking_index') }}" class="">Parking</a>
+</section>
+{% endblock %}

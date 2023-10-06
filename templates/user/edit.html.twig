@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {{ form_start(form, { 'attr': {'class': 'form-style'} }) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-sm btn-primary">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+</section>
+{% endblock %}

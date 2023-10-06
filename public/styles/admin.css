@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2&display=swap");
+.main-btn,
+a.main-btn,
+button.main-btn {
+  background-color: #0267C1;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  width: 50%;
+  margin: 0 auto;
+}
+.main-btn:hover,
+a.main-btn:hover,
+button.main-btn:hover {
+  background-color: #0382f3;
+  border: none;
+}
+.main-btn:focus,
+a.main-btn:focus,
+button.main-btn:focus {
+  background-color: #2c9bfd !important;
+  border: none;
+}
+
+* {
+  font-family: "Exo 2", sans-serif !important;
+}
+
+header {
+  background-color: red;
+  color: #FFF;
+}
+
+body {
+  background-color: #E8EFF5;
+}/*# sourceMappingURL=admin.css.map */

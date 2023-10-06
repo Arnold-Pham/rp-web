@@ -1,0 +1,17 @@
+// PAGE DE CSS ADMIN
+
+@import 'var.scss';
+@import url('https://fonts.googleapis.com/css2?family=Exo+2&display=swap');
+
+* {
+    font-family: 'Exo 2', sans-serif !important;
+}
+
+header {
+    background-color: red;
+    color: $white ;
+}
+
+body {
+    background-color: $gris;
+}

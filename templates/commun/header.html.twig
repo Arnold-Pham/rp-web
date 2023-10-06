@@ -1,0 +1,55 @@
+<header>
+    {% if app.user %}
+    <nav class="container">
+        <div>
+            <a href="{{ path('app_main') }}">
+                <img src="{{ asset('common/logo_simple/logo_064.webp') }}" alt="Logo du site">
+                Accueil
+            </a>
+        </div>
+        <div>
+            <label for="burger" class="menu-burger">
+                <div class="menu-burger-btn">
+                    <i class="bi bi-list"></i>
+                </div>
+            </label>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="container">
+        <div>
+            <a href="{{ path('app_main') }}">
+                <img src="{{ asset('common/logo_simple/logo_064.webp') }}" alt="Logo du site">
+                Accueil
+            </a>
+        </div>
+        <div>
+            <a href="{{ path('app_main') }}">Réservation</a>
+            <a href="{{ path('app_contact') }}">Contact</a>
+        </div>
+    </nav>
+    {% endif %}
+</header>
+
+{% if app.user %}
+<div class="menu">
+    <input type="checkbox" id="burger">
+    <div class="menu-links">
+        <div class="container">
+            <a href="{{ path('app_main') }}">Réservation</a>
+            <a href="{{ path('app_user_index') }}">Profil</a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <details>
+                <summary>
+                    Admin
+                </summary>
+                <a href="{{path('app_admin_user_index')}}">&emsp;Utilisateur</a>
+                <a href="{{path('app_admin_airport_index')}}">&emsp;Airport</a>
+                <a href="{{path('app_admin_parking_index')}}">&emsp;Parking</a>
+            </details>
+            {% endif %}
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
+    </div>
+</div>
+{% endif %}

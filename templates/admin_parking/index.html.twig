@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheet %}main.css{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {% for message in app.flashes('crud') %}
+    <div class="msg-y">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="msg-n">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, { 'attr': {'class': 'form-style'} }) }}
+    {{ form_widget(form) }}
+    <div class="flex">
+        <button class="btn-main">{{ button_label|default('Ajouter') }}</button>
+    </div>
+    {{ form_end(form) }}
+</section>
+
+<hr>
+
+<section>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Aéroport</th>
+                <th scope="col">Place</th>
+                <th scope="col">Prix</th>
+                <th scope="col" width="10%">Disponibilité</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for parking in parkings %}
+            <tr id="{{ parking.id }}">
+                <td>{{ parking.id }}</td>
+                <td><a href="{{ path('app_admin_airport_index') ~ '#' ~ parking.airport.id }}" class="btn-bleu">
+                        {{ parking.airport.iataCode }}
+                    </a>
+                </td>
+                <td>{{ parking.name }}</td>
+                <td>{{ parking.dailyPrice|number_format(2, ',', ' ') ~ ' €' }}</td>
+                <td>{{ parking.available ? '✔️' : '✖️' }}</td>
+                <td>
+                    <div class="flex center">
+                        <a class="btn-bleu" href="{{ path('app_admin_parking_edit', {'id': parking.id}) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form method="post" action="{{ path('app_admin_parking_delete', {'id': parking.id}) }}"
+                            onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ parking.id) }}">
+                            <button class="btn-rouge"><i class="bi bi-trash3-fill"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">Aucune données trouvées</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

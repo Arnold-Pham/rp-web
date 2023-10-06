@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {{ dump(app) }}
+    <pre>
+        {{ dump(ip) }}
+    </pre>
+    <a href="{{path('app_user_settings')}}">Paramètre</a>
+</section>
+{% endblock %}
