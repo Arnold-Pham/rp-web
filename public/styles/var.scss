@@ -1,7 +1,9 @@
 // VARIABLES GLOBALES POUR LE SITE
+@import 'fonctions.scss';
 
 $bleu: #0267C1;
 $gris: #E8EFF5;
+$gris-transparent: #E8EFF5DD;
 $rouge: #B22222;
 $rouge-c: #FFCCCC;
 $vert: #006400;
@@ -10,27 +12,6 @@ $vert-c: #AADDAA;
 $noir: #000;
 $midbleu: lighten($bleu, 25);
 $white: #FFF;
-
-@mixin bouton ($couleur, $largeur: auto) {
-    background-color: $couleur;
-    border: none;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.25rem;
-    width: $largeur;
-    color: $white;
-    text-decoration: none;
-
-    &:hover {
-        background-color: lighten($color: $couleur, $amount: 10);
-        border: none;
-    }
-
-    &:focus {
-        background-color: lighten($color: $couleur, $amount: 20) !important;
-        border: none;
-    }
-}
 
 .btn-main {
     @include bouton($bleu, 50%);

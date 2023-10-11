@@ -9,3 +9,24 @@
     margin: 1rem 0 2rem;
     border-radius: 10px;
 }
+
+@mixin bouton ($couleur, $largeur: auto) {
+    background-color: $couleur;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.25rem;
+    width: $largeur;
+    color: $white;
+    text-decoration: none;
+
+    &:hover {
+        background-color: lighten($color: $couleur, $amount: 10);
+        border: none;
+    }
+
+    &:focus {
+        background-color: lighten($color: $couleur, $amount: 20) !important;
+        border: none;
+    }
+}

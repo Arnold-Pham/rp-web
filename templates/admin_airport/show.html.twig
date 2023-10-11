@@ -2,7 +2,9 @@
 
 {% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
 
-{% block stylesheet %}main.css{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+{% endblock %}
 
 {% block body %}
 <h1>{{ title }}</h1>
