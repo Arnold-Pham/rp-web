@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'valetB', targetEntity: Option::class)]
     private Collection $optionsB;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateC = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

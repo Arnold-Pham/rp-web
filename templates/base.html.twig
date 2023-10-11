@@ -14,8 +14,10 @@
 </head>
 
 <body>
+    {% if title is defined %}
     {% if title != 'Connexion' %}
     {% include "commun/header.html.twig" %}
+    {% endif %}
     {% endif %}
     <div class="background"></div>
     <div class="ecran"></div>

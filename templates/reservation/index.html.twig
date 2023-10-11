@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {% if form is defined %}
+    {{ form_start(form)}}
+    {{ form_widget(form)}}
+    <button type="submit">Envoyer</button>
+    {{ form_end(form)}}
+    {% endif %}
+</section>
+{% endblock %}
