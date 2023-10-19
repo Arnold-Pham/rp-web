@@ -24,7 +24,7 @@
             </a>
         </div>
         <div>
-            <a href="{{ path('app_main') }}">Réservation</a>
+            <a href="{{ path('app_reservation') }}">Réservation</a>
             <a href="{{ path('app_contact') }}">Contact</a>
         </div>
     </nav>
@@ -36,7 +36,7 @@
     <input type="checkbox" id="burger">
     <div class="menu-links">
         <div class="container">
-            <a href="{{ path('app_main') }}">Réservation</a>
+            <a href="{{ path('app_reservation') }}">Réservation</a>
             <a href="{{ path('app_user_index') }}">Profil</a>
             {% if is_granted('ROLE_ADMIN') %}
             <details>

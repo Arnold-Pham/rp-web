@@ -55,10 +55,16 @@ class UserSettingsType extends AbstractType
                     'class' => 'form-floating mb-3'
                 ]
             ])
-            ->add('gender', TextType::class, [
+            ->add('genre',  ChoiceType::class, [
                 'attr' => ['placeholder' => ''],
+                'choices' => [
+                    'M' => 1,
+                    'Mme' => 0
+                ],
                 'disabled' => true,
                 'label' => 'Genre',
+                'mapped' => false,
+                'required' => true,
                 'row_attr' => [
                     'class' => 'form-floating mb-3'
                 ]

@@ -10,12 +10,11 @@
 }
 
 body {
-    background-color: $gris;
-
     // background-image: url('https://cdna.artstation.com/p/assets/images/images/024/192/880/large/shiki-hayate-airport.jpg?1581601129');
     // background-position: center center;
     // background-repeat: no-repeat;
     // background-size: contain;
+    background-color: $gris;
 
     .background {
         width: 100vw;
@@ -44,7 +43,6 @@ body {
 header {
     user-select: none;
     background-color: $bleu;
-    position: fixed;
     width: 100%;
     top: 0;
     height: 4rem;
@@ -97,7 +95,6 @@ header {
 .menu {
     user-select: none;
 
-
     #burger {
         display: none;
 
@@ -129,30 +126,14 @@ header {
                 color: $white;
                 display: flex;
                 flex-direction: column;
-
-
-
-                summary {
-                    text-align: center;
-
-                    &:hover {
-                        background-color: lighten($bleu, 10);
-                        border-radius: 30px;
-
-
-                    }
-                }
-
             }
-
-
 
             a,
             summary {
+                text-align: center;
                 padding: 0.5rem;
                 color: $white;
                 text-decoration: none;
-
                 text-align: center;
 
                 &:hover {
@@ -160,12 +141,12 @@ header {
                     border-radius: 30px;
                 }
             }
+
         }
     }
 }
 
 main {
-    margin-top: 60px;
     padding: 30px 0;
     min-height: calc(100vh);
 

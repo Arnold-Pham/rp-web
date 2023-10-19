@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -19,8 +20,14 @@ class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $this->extra = $options['extra'];
+
+        ($this->extra + 1) % 2 == 0 ? $extra1 = true : $extra1 = false;
+        $this->extra == 2 || $this->extra == 3 || $this->extra == 6 || $this->extra == 7 ? $extra2 = true : $extra2 = false;
+        $this->extra >= 4 ? $extra3 = true : $extra3 = false;
+
         $builder
-            ->add('email', TextType::class, [
+            ->add('email', EmailType::class, [
                 'attr' => ['placeholder' => ''],
                 'required' => true,
                 'row_attr' => [
@@ -36,10 +43,8 @@ class ReservationType extends AbstractType
                 ],
                 'model_timezone' => 'Europe/Paris',
                 'widget' => 'single_text',
-                // 'time_widget' => 'choice',
                 'minutes' => [0, 15, 30, 45],
                 'view_timezone' => 'Europe/Paris',
-                "data" => new DateTime('now', new DateTimeZone('Europe/Paris')),
             ])
             ->add('flightA', TextType::class, [
                 'attr' => ['placeholder' => ''],
@@ -58,10 +63,8 @@ class ReservationType extends AbstractType
                 ],
                 'model_timezone' => 'Europe/Paris',
                 'widget' => 'single_text',
-                // 'time_widget' => 'choice',
                 'minutes' => [0, 15, 30, 45],
                 'view_timezone' => 'Europe/Paris',
-                "data" => new DateTime('now', new DateTimeZone('Europe/Paris')),
             ])
             ->add('flightB', TextType::class, [
                 'attr' => ['placeholder' => ''],
@@ -73,6 +76,7 @@ class ReservationType extends AbstractType
             ])
             ->add('airport', EntityType::class, [
                 'attr' => ['placeholder' => ''],
+                'label' => 'Aéroport',
                 'choice_label' => 'name',
                 'class' => Airport::class,
                 'required' => true,
@@ -88,6 +92,7 @@ class ReservationType extends AbstractType
                 ]
             ])
             ->add('extra1', CheckboxType::class, [
+                'data' => $extra1,
                 'label' => 'Nettoyage Intérieur',
                 'mapped' => false,
                 'required' => false,
@@ -96,6 +101,7 @@ class ReservationType extends AbstractType
                 ]
             ])
             ->add('extra2', CheckboxType::class, [
+                'data' => $extra2,
                 'label' => 'Nettoyage Extérieur',
                 'mapped' => false,
                 'required' => false,
@@ -104,6 +110,7 @@ class ReservationType extends AbstractType
                 ]
             ])
             ->add('extra3', CheckboxType::class, [
+                'data' => $extra3,
                 'label' => 'Pleins d\'essence',
                 'mapped' => false,
                 'required' => false,
@@ -126,6 +133,7 @@ class ReservationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reservation::class,
+            'extra' => null
         ]);
     }
 }

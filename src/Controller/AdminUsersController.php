@@ -35,6 +35,7 @@ class AdminUsersController extends AbstractController
             $user->setRoles(["ROLE_USER"]);
             $user->setZone($this->region($form->get('region')->getData()));
             $user->setDateC(new DateTime('now', new DateTimeZone('Europe/Paris')));
+
             $form->get('genre')->getData() ? $user->setGender('Homme') : $user->setGender('Femme');
 
             $entityManager->persist($user);

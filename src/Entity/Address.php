@@ -55,7 +55,7 @@ class Address
         return $this;
     }
 
-    public function getCity(): ?int
+    public function getCity(): ?string
     {
         return $this->city;
     }

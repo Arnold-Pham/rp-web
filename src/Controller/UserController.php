@@ -47,6 +47,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $form->get('genre')->getData() ? $user->setGender('Homme') : $user->setGender('Femme');
             $entityManager->persist($user);
             $entityManager->flush();
 

@@ -20,7 +20,7 @@ class PersonalData
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
     #[ORM\Column]
@@ -43,6 +43,9 @@ class PersonalData
 
     #[ORM\OneToMany(mappedBy: 'personalData', targetEntity: Reservation::class)]
     private Collection $reservations;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $companyName = null;
 
     public function __construct()
     {
@@ -176,6 +179,18 @@ class PersonalData
                 $reservation->setPersonalData(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
+    }
+
+    public function setCompanyName(?string $companyName): static
+    {
+        $this->companyName = $companyName;
 
         return $this;
     }
