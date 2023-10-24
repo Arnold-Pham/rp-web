@@ -29,7 +29,6 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $title = 'Settings';
-
         $form = $this->createForm(UserSettingsType::class, $user);
         $form->handleRequest($request);
 
@@ -42,7 +41,6 @@ class UserController extends AbstractController
         $title = 'Settings Edit';
         $submit = '';
         $button_label = 'Enregistrer';
-
         $form = $this->createForm(UserSettings2Type::class, $user);
         $form->handleRequest($request);
 

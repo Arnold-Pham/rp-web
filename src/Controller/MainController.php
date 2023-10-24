@@ -39,7 +39,6 @@ class MainController extends AbstractController
     {
         $title = 'Contact';
         $button_label = 'Envoyer';
-
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
@@ -48,14 +47,7 @@ class MainController extends AbstractController
             $resa = $form->get('resa')->getData();
             $text = $form->get('text')->getData();
             $sujet = $form->get('sujet')->getData();
-
-            $this->addFlash('envoyer', $email . ' ' . $sujet . ' ' . $text . ' ' . $resa);
-            /*
-                $this->addFlash('envoyer', 'Email: ' . $email);
-                $this->addFlash('envoyer', 'Reservation: ' . $resa);
-                $this->addFlash('envoyer', 'Texte: ' . $text);
-                $this->addFlash('envoyer', 'Sujet: ' . $sujet);
-            */
+            $this->addFlash('envoyer', $email . ' /// ' . $sujet . ' /// ' . $text . ' /// ' . $resa);
 
             return $this->redirectToRoute('app_contact', [], Response::HTTP_SEE_OTHER);
         }

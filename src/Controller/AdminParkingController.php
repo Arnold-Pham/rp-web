@@ -21,13 +21,11 @@ class AdminParkingController extends AbstractController
         $title = 'Admin Parking';
         $parkings = $parkingRepository->findAll();
         $parking = new Parking();
-
         $form = $this->createForm(AdminParkingType::class, $parking);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $parking->setAvailable(TRUE);
-
             $entityManager->persist($parking);
             $entityManager->flush();
             $this->addFlash('crud', 'Parking ajouté avec succès');
@@ -45,9 +43,8 @@ class AdminParkingController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $parking->getId(), $request->request->get('_token'))) {
             $entityManager->remove($parking);
             $entityManager->flush();
+            $this->addFlash('error', 'Parking supprimé avec succès');
         }
-
-        $this->addFlash('error', 'Parking supprimé avec succès');
 
         return $this->redirectToRoute('app_admin_parking_index', [], Response::HTTP_SEE_OTHER);
     }
@@ -59,7 +56,6 @@ class AdminParkingController extends AbstractController
         $title = 'Admin Parking Edit';
         $button_label = 'Modifier';
         $parkings = $parkingRepository->findAll();
-
         $form = $this->createForm(AdminParking2Type::class, $parking);
         $form->handleRequest($request);
 
