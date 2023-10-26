@@ -97,7 +97,7 @@ class AdminUsersController extends AbstractController
             $user->setZone($this->region($form->get('region')->getData()));
             $form->get('genre')->getData() ? $user->setGender('Homme') : $user->setGender('Femme');
 
-            // Vérifie en tant que Super_Admin si la valeur existe bien 
+            // Vérifie si la valeur "role" existe bien dans le form ensuite le superadmin pourra appliqué des changement de rôle entre Admin & User
             if ($this->isGranted('ROLE_SUPER_ADMIN')) {
                 $form->get('role')->getData() ? $user->setRoles(["ROLE_ADMIN"]) : $user->setRoles(["ROLE_USER"]);
             }
