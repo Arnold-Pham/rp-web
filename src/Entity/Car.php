@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\PersonalData;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CarRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 class Car
@@ -15,15 +16,33 @@ class Car
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 2,
+        minMessage: 'La marque de la voiture doit contenir au moins {{ limit }} caractères .',
+        max: 255,
+        maxMessage: 'La marque de la voiture doit contenir au maximum {{ limit }} caractères.'
+    )]
     private ?string $brand = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 1,
+        minMessage: 'Veuillez saisir le nom du modèle de la voiture. ',
+        max: 255,
+        maxMessage: 'Le modèle de la voiture doit contenir au maximum {{ limit }} caractères.'
+    )]
     private ?string $model = null;
 
     #[ORM\Column(length: 255)]
     private ?string $color = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 7,
+        minMessage: 'Veuillez saisir une plaque d\'immatriculation conforme Française. ({{ limit }} caractères minimum) ',
+        max: 9,
+        maxMessage: 'Veuillez une plaque d\'immatriculation conforme Française. ( {{ limit }} caractères maximum)'
+    )]
     private ?string $plate = null;
 
     #[ORM\OneToOne(mappedBy: 'car', cascade: ['persist', 'remove'])]

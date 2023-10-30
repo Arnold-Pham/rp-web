@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\PersonalData;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AddressRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -15,12 +16,30 @@ class Address
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Votre adresse est trop courte ({{ limit }} caractères)',
+        max: 255,
+        maxMessage: 'Votre adresse est trop longue ({{ limit }} caractères)'
+    )]
     private ?string $address = null;
 
+
     #[ORM\Column]
+    #[Assert\Range(
+        min: 1000,
+        max: 98890,
+        notInRangeMessage: 'Saisir un code postal entre 0{{ min }} et {{ max }} existant en France ',
+    )]
     private ?int $zipCode = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 1,
+        minMessage: 'Veuillez saisir une ville',
+        max: 45,
+        maxMessage: 'Veuillez saisir une ville en France'
+    )]
     private ?string $city = null;
 
     #[ORM\OneToOne(mappedBy: 'address', cascade: ['persist', 'remove'])]

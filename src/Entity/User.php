@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -20,6 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Email(message: 'L\'email {{ value }} n\'est pas une adresse valide')]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -38,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column]
+    #[Assert\Positive]
+    #[Assert\LessThan(value: 800000000, message: "Le numéro de téléphone {{ value }} n'est pas valide")]
+    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro de téléphone {{ value }} n\'est pas valide')]
     private ?int $phoneNumber = null;
 
     #[ORM\Column(length: 255)]

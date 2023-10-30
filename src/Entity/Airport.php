@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AirportRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AirportRepository::class)]
 class Airport
@@ -18,9 +19,21 @@ class Airport
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Veuillez saisir le nom de votre aéroport ayant minimum {{ limit }} caractères.',
+        max: 255,
+        maxMessage: 'Le nom de l\'aéoroport contient trop de {{ limit }} caractères.'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 3,
+        minMessage: 'Veuillez saisir un code IATA existant qui contient au moins  {{ limit }} caractères',
+        max: 3,
+        maxMessage: 'Veuillez saisir {{ limit }} caractères pour le code IATA. '
+    )]
     private ?string $iataCode = null;
 
     #[ORM\Column(length: 255)]

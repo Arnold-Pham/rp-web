@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReservationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -15,21 +16,36 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email(message: 'L\'email {{ value }} n\'est pas une adresse valide')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(value: '+1 day', message: 'La réservation doit se faire 24h à l\'avance.')]
     private ?\DateTimeInterface $dateA = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(message: 'La réservation ne peux pas être le même jour ou avant que celle du départ ', propertyPath: "dateA")]
     private ?\DateTimeInterface $dateB = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Le numéro de vol contient doit contenir au moins {{ limit }} caractères.',
+        max: 255,
+        maxMessage: 'Le numéro de vol doit pas contenir plus de {{ limit }} caractères.'
+    )]
     private ?string $flightA = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Le numéro de vol contient doit contenir au moins {{ limit }} caractères.',
+        max: 255,
+        maxMessage: 'Le numéro de vol doit pas contenir plus de {{ limit }} caractères.'
+    )]
     private ?string $flightB = null;
 
     #[ORM\Column(length: 255)]

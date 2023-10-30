@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ParkingRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParkingRepository::class)]
 class Parking
@@ -14,9 +15,16 @@ class Parking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Le nom du parking est trop court ! ({{ limit }} caractères)',
+        max: 255,
+        maxMessage: 'Le nom du parking est trop long !({{ limit }} caractères)'
+    )]
     private ?string $name = null;
 
     #[ORM\Column]

@@ -18,7 +18,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/admin/users')]
 class AdminUsersController extends AbstractController
 {
-    // Page des utilisateur de l'admin
     #[Route('/', name: 'app_admin_user_index')]
     public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {

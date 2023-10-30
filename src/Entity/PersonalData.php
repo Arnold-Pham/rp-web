@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PersonalDataRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: PersonalDataRepository::class)]
 class PersonalData
@@ -18,12 +20,28 @@ class PersonalData
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 2,
+        minMessage: 'Votre nom de famille est trop court ! ({{ limit }} caractères)',
+        max: 100,
+        maxMessage: 'Votre nom de famille contient trop de  {{ limit }} caractères.'
+    )]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 2,
+        minMessage: 'Le prénom inscrit est trop court ! ({{ limit }} caractères minimum)',
+        max: 255,
+        maxMessage: 'Le prénom inscrit est trop long ! ({{ limit }} caractères maximum)'
+    )]
     private ?string $firstname = null;
 
+
     #[ORM\Column]
+    #[Assert\Positive]
+    #[Assert\LessThan(value: 800000000, message: "Le numéro de téléphone {{ value }} n'est pas valide.")]
+    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro de téléphone {{ value }} n\'est pas valide.')]
     private ?int $phoneNumber = null;
 
     #[ORM\Column]

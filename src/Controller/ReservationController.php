@@ -86,11 +86,10 @@ class ReservationController extends AbstractController
 
                 $option->setExtra($extra);
                 $option->setReservation($reservation);
+
                 $entityManager->persist($option);
                 $entityManager->flush();
                 $reservation->setOption($option);
-                $entityManager->persist($reservation);
-                $entityManager->flush();
             }
 
             $entityManager->persist($reservation);
@@ -122,11 +121,12 @@ class ReservationController extends AbstractController
         if ($reservation === null) return $this->redirectToRoute('app_reservation', [], Response::HTTP_SEE_OTHER);
         $personalData = $reservation->getPersonalData();
         $genre = 'Homme';
-
+        $company = null;
         // Crée une nouvelle instance PersonnalData si il y a pas de donnée récupérer par la variable $personnalData sinon il récupère les informations de $genre
         $personalData === null ? $personalData = new PersonalData() : $genre = $personalData->getGender();
+        if ($personalData->getCompanyName() !== null) $company = $personalData->getCompanyName();
 
-        $form = $this->createForm(PersonalDataType::class, $personalData, compact('genre'));
+        $form = $this->createForm(PersonalDataType::class, $personalData, compact('genre', 'company'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -192,7 +192,7 @@ class ReservationController extends AbstractController
 
 
     #[Route('/adresse', name: 'app_adresse')]
-    public function adress(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
+    public function address(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
         if (!isset($_COOKIE['road'])) return $this->redirectToRoute('app_code', [], Response::HTTP_SEE_OTHER);
         $code_road = $_COOKIE['road'];
@@ -214,36 +214,36 @@ class ReservationController extends AbstractController
         $invoice = $reservation->getPersonalData()->getInvoice();
 
         // Valeur par défaut de addresse invoice
-        $checkbox = false;
-        $iAddress = null;
-        $iCity = null;
-        $iZip = null;
+        $checkbox = 0;
+        $iadd = null;
+        $icit = null;
+        $izip = null;
 
         // Crée une nouvelle instance Address si elle est null 
         if ($address === null) $address = new Address();
 
         // Vérifie si l'addresse de facturation existe et est différente de l'Adresse alors ca permet d'obtenir l'adresse de facturation associée à la réservation 
         if ($invoice !== null && $invoice != $address) {
-            $checkbox = true;
-            $iAddress = $invoice->getAddress();
-            $iCity = $invoice->getCity();
-            $iZip = $invoice->getZipCode();
+            $checkbox = 1;
+            $iadd = $invoice->getAddress();
+            $icit = $invoice->getCity();
+            $izip = $invoice->getZipCode();
         }
 
-        // Crée le formulaire AddressType dans form et récupere  les options suivantes ( $checkbox , $iAddress, $iCity, $iZip)
-        $form = $this->createForm(AddressType::class, $address, compact('checkbox', 'iAddress', 'iCity', 'iZip'));
+        // Crée le formulaire AddressType dans form et récupere  les options suivantes ( $checkbox , $iadd, $icit, $izip)
+        $form = $this->createForm(AddressType::class, $address, compact('checkbox', 'iadd', 'icit', 'izip'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($address);
             $entityManager->flush();
-
+            $reservation->getPersonalData()->setAddress($address);
             $reservation->getPersonalData()->setInvoice($address);
 
             // Vérifie si le champ ('diff') dans le form à été coché 
             if ($form->get('diff')->getData()) {
                 // Si invoice est null on donne une nouvelle valeur a la variable invoice: new address
-                if ($invoice === null) $invoice = new Address();
+                if ($invoice === null) $invoice = $address;
 
                 // Récupère la section ('adressInvoice') à partir du form (AddressType) et de le stocker dans la variable $addIn
                 $addIn = $form->get('addressInvoice');
@@ -252,6 +252,7 @@ class ReservationController extends AbstractController
                 $addressInvoice = $addIn->get('address_invoice')->getData();
                 $cityInvoice = $addIn->get('city_invoice')->getData();
                 $zipInvoice = $addIn->get('zipCode_invoice')->getData();
+
                 $invoice->setAddress($addressInvoice);
                 $invoice->setCity($cityInvoice);
                 $invoice->setZipCode($zipInvoice);
@@ -261,13 +262,21 @@ class ReservationController extends AbstractController
                 $reservation->getPersonalData()->setInvoice($invoice);
             }
 
-            $reservation->getPersonalData()->setAddress($address);
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_adresse', [], Response::HTTP_SEE_OTHER);
+            // dd($reservation->getPersonalData(), $address, $invoice);
+
+            return $this->redirectToRoute('yeah', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
+    }
+
+    #[Route('/youhou', name: 'yeah')]
+    public function yeah(): Response
+    {
+        $title = 'Yeah ça a redirigé';
+        return $this->render('main/index.html.twig', compact('title'));
     }
 }
