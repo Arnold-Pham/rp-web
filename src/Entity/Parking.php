@@ -78,18 +78,6 @@ class Parking
         return $this;
     }
 
-    public function isAvailable(): ?bool
-    {
-        return $this->available;
-    }
-
-    public function setAvailable(bool $available): static
-    {
-        $this->available = $available;
-
-        return $this;
-    }
-
     public function getAirport(): ?Airport
     {
         return $this->airport;
