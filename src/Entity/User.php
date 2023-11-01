@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use App\Entity\Option;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -20,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Assert\Email(message: 'L\'email {{ value }} n\'est pas une adresse valide')]
     private ?string $email = null;
 
@@ -39,10 +41,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     #[Assert\Positive]
-    #[Assert\LessThan(value: 800000000, message: "Le numéro de téléphone {{ value }} n'est pas valide")]
-    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro de téléphone {{ value }} n\'est pas valide')]
+    #[Assert\LessThan(value: 800000000, message: 'Le numéro doit commencer par 06 ou 07.')]
+    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro doit commencer par 06 ou 07.')]
     private ?int $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
@@ -65,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateE = null;
+
 
     public function __construct()
     {

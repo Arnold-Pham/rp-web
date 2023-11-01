@@ -26,14 +26,6 @@ class MainController extends AbstractController
     }
 
 
-    #[Route('/reservation', name: 'app_reservation')]
-    public function reservation(): Response
-    {
-        $title = 'Ma réservation';
-        return $this->render('main/reservation.html.twig', compact('title'));
-    }
-
-
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request): Response
     {

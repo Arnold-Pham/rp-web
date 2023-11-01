@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use App\Entity\Address;
 use App\Entity\Reservation;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,32 +23,34 @@ class PersonalData
     #[ORM\Column(length: 255)]
     #[Assert\Length(
         min: 2,
-        minMessage: 'Votre nom de famille est trop court ! ({{ limit }} caractères)',
+        minMessage: 'Le nom de famille est trop court ({{ limit }} caractères minimum).',
         max: 100,
-        maxMessage: 'Votre nom de famille contient trop de  {{ limit }} caractères.'
+        maxMessage: 'Le nom de famille est trop long ({{ limit }} caractères maximum).'
     )]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(
         min: 2,
-        minMessage: 'Le prénom inscrit est trop court ! ({{ limit }} caractères minimum)',
+        minMessage: 'Le prénom est trop court ({{ limit }} caractères minimum).',
         max: 255,
-        maxMessage: 'Le prénom inscrit est trop long ! ({{ limit }} caractères maximum)'
+        maxMessage: 'Le prénom est trop long ({{ limit }} caractères maximum).'
     )]
     private ?string $firstname = null;
 
-
     #[ORM\Column]
     #[Assert\Positive]
-    #[Assert\LessThan(value: 800000000, message: "Le numéro de téléphone {{ value }} n'est pas valide.")]
-    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro de téléphone {{ value }} n\'est pas valide.')]
+    #[Assert\LessThan(value: 800000000, message: 'Le numéro doit commencer par 06 ou 07.')]
+    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro doit commencer par 06 ou 07.')]
     private ?int $phoneNumber = null;
 
     #[ORM\Column]
     private ?bool $type = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $companyName = null;
+
+    #[ORM\Column(length: 20)]
     private ?string $gender = null;
 
     #[ORM\OneToOne(inversedBy: 'personalData', cascade: ['persist', 'remove'])]
@@ -62,8 +65,6 @@ class PersonalData
     #[ORM\OneToMany(mappedBy: 'personalData', targetEntity: Reservation::class)]
     private Collection $reservations;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $companyName = null;
 
     public function __construct()
     {

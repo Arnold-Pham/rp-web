@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use App\Entity\Reservation;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ParkingRepository;
@@ -9,29 +10,28 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: ParkingRepository::class)]
 class Parking
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(
-        min: 10,
-        minMessage: 'Le nom du parking est trop court ! ({{ limit }} caractères)',
-        max: 255,
-        maxMessage: 'Le nom du parking est trop long !({{ limit }} caractères)'
+        min: 3,
+        minMessage: 'Le nom du parking est trop court ({{ limit }} caractères).',
+        max: 100,
+        maxMessage: 'Le nom du parking est trop long ({{ limit }} caractères).'
     )]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero]
+    #[Assert\LessThanOrEqual(50.00)]
     private ?float $dailyPrice = null;
-
-    #[ORM\Column]
-    private ?bool $available = null;
 
     #[ORM\ManyToOne(inversedBy: 'parkings')]
     private ?Airport $airport = null;
@@ -39,9 +39,14 @@ class Parking
     #[ORM\OneToMany(mappedBy: 'parking', targetEntity: Reservation::class)]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: 'parking', targetEntity: Place::class, orphanRemoval: true)]
+    private Collection $places;
+
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->places = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,6 +126,36 @@ class Parking
             // set the owning side to null (unless already changed)
             if ($reservation->getParking() === $this) {
                 $reservation->setParking(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+            $place->setParking($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        if ($this->places->removeElement($place)) {
+            // set the owning side to null (unless already changed)
+            if ($place->getParking() === $this) {
+                $place->setParking(null);
             }
         }
 

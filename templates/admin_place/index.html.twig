@@ -31,32 +31,30 @@
     <table>
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Aéroport</th>
-                <th scope="col">Place</th>
-                <th scope="col">Prix</th>
-                <th scope="col">Action</th>
+                <th scope="col">Id</th>
+                <th scope="col">Parking</th>
+                <th scope="col">Label</th>
+                <th scope="col">Available</th>
+                <th scope="col">actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for parking in parkings %}
-            <tr id="{{ parking.id }}">
-                <td>{{ parking.id }}</td>
-                <td>
-                    <a href="{{ path('app_admin_airport_index') ~ '#' ~ parking.airport.id }}" class="btn-bleu">
-                        {{ parking.airport.iataCode }}
-                    </a>
-                </td>
-                <td>{{ parking.name }}</td>
-                <td>{{ parking.dailyPrice|number_format(2, ',', ' ') ~ ' €' }}</td>
+            {% for place in places %}
+            <tr id="{{ place.id }}">
+                <td>{{ place.id }}</td>
+                <td><a href="{{ path('app_admin_airport_index') ~ '#' ~ place.parking.id }}" class="btn-bleu">
+                        {{ place.parking.name }}
+                    </a></td>
+                <td>{{ place.label }}</td>
+                <td>{{ place.available ? 'Oui' : 'Non' }}</td>
                 <td>
                     <div class="flex center">
-                        <a class="btn-bleu" href="{{ path('app_admin_parking_edit', {'id': parking.id}) }}">
+                        <a class="btn-bleu" href="{{ path('app_admin_place_edit', {'id': place.id}) }}">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <form method="POST" action="{{ path('app_admin_parking_delete', {'id': parking.id}) }}"
+                        <form method="POST" action="{{ path('app_admin_place_delete', {'id': place.id}) }}"
                             onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet élémént ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ parking.id) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ place.id) }}">
                             <button class="btn-rouge"><i class="bi bi-trash3-fill"></i></button>
                         </form>
                     </div>
@@ -64,7 +62,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="6">Aucune données trouvées</td>
+                <td colspan="5">no records found</td>
             </tr>
             {% endfor %}
         </tbody>

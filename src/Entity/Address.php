@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+
 use App\Entity\PersonalData;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AddressRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -23,7 +25,6 @@ class Address
         maxMessage: 'Votre adresse est trop longue ({{ limit }} caractères)'
     )]
     private ?string $address = null;
-
 
     #[ORM\Column]
     #[Assert\Range(
@@ -44,6 +45,7 @@ class Address
 
     #[ORM\OneToOne(mappedBy: 'address', cascade: ['persist', 'remove'])]
     private ?PersonalData $personalData = null;
+
 
     public function getId(): ?int
     {

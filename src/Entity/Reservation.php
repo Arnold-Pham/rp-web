@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReservationRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -19,7 +21,7 @@ class Reservation
     #[Assert\Email(message: 'L\'email {{ value }} n\'est pas une adresse valide')]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $code = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -27,24 +29,24 @@ class Reservation
     private ?\DateTimeInterface $dateA = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan(message: 'La réservation ne peux pas être le même jour ou avant que celle du départ ', propertyPath: "dateA")]
+    #[Assert\GreaterThan(message: 'La fin de réservation doit être après la date de début.', propertyPath: "dateA")]
     private ?\DateTimeInterface $dateB = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(
-        min: 6,
-        minMessage: 'Le numéro de vol contient doit contenir au moins {{ limit }} caractères.',
-        max: 255,
-        maxMessage: 'Le numéro de vol doit pas contenir plus de {{ limit }} caractères.'
+        min: 5,
+        minMessage: 'Le numéro de vol est trop court ({{ limit }} caractères minimum).',
+        max: 10,
+        maxMessage: 'Le numéro de vol est trop long ({{ limit }} caractères maximum).'
     )]
     private ?string $flightA = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(
-        min: 6,
-        minMessage: 'Le numéro de vol contient doit contenir au moins {{ limit }} caractères.',
-        max: 255,
-        maxMessage: 'Le numéro de vol doit pas contenir plus de {{ limit }} caractères.'
+        min: 5,
+        minMessage: 'Le numéro de vol est trop court ({{ limit }} caractères minimum).',
+        max: 10,
+        maxMessage: 'Le numéro de vol est trop long ({{ limit }} caractères maximum).'
     )]
     private ?string $flightB = null;
 
@@ -68,6 +70,10 @@ class Reservation
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateC = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?Place $place = null;
+
 
     public function getId(): ?int
     {
@@ -226,6 +232,18 @@ class Reservation
     public function setDateC(\DateTimeInterface $dateC): static
     {
         $this->dateC = $dateC;
+
+        return $this;
+    }
+
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): static
+    {
+        $this->place = $place;
 
         return $this;
     }

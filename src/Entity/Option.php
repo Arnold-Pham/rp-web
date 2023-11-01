@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OptionRepository;
+
 
 #[ORM\Entity(repositoryClass: OptionRepository::class)]
 class Option
@@ -25,6 +27,7 @@ class Option
 
     #[ORM\ManyToOne(inversedBy: 'optionsB')]
     private ?User $valetB = null;
+
 
     public function getId(): ?int
     {

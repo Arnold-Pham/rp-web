@@ -17,7 +17,7 @@ class PersonalDataType extends AbstractType
         $this->genre = $options['genre'];
         $this->company = $options['company'];
 
-        $this->genre == 'Homme' ? $sexe = 0 : $sexe = 1;
+        $this->genre == 'Homme' ? $sexe = 1 : $sexe = 0;
 
         $builder
             ->add('type', ChoiceType::class, [
