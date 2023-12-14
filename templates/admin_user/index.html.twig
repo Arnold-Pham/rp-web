@@ -46,11 +46,7 @@
         <tbody>
             {% for user in users %}
             <tr id="{{ user.id }}">
-                <td>
-                    <a class="btn-bleu" href="{{ path('app_admin_user_show', {'id': user.id}) }}">
-                        {{ user.id }}
-                    </a>
-                </td>
+                <td>{{ user.id }}</td>
                 <td>
                     <img alt="" height="50" class="rounded" src="{{ user.picture == 'defaultPicture.png'
                         ? asset('common/' ~ user.picture) : asset('images/' ~ user.picture) }}">

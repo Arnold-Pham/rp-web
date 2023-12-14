@@ -18,11 +18,12 @@ class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $this->extra = $options['extra'];
+        $extra = 0;
 
-        ($this->extra + 1) % 2 == 0 ? $extra1 = true : $extra1 = false;
-        $this->extra == 2 || $this->extra == 3 || $this->extra == 6 || $this->extra == 7 ? $extra2 = true : $extra2 = false;
-        $this->extra >= 4 ? $extra3 = true : $extra3 = false;
+        if (isset($options['extra'])) $extra = $options['extra'];
+        ($extra + 1) % 2 == 0 ? $extra1 = true : $extra1 = false;
+        $extra == 2 || $extra == 3 || $extra == 6 || $extra == 7 ? $extra2 = true : $extra2 = false;
+        $extra >= 4 ? $extra3 = true : $extra3 = false;
 
         $builder
             ->add('email', EmailType::class, [
@@ -131,7 +132,7 @@ class ReservationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reservation::class,
-            'extra' => null
+            'extra' => 0
         ]);
     }
 }

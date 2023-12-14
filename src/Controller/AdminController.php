@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 
-
 use DateTime;
 use DateTimeZone;
 use App\Entity\User;
@@ -32,7 +31,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
-    //! =========================================================================== USERS ===========================================================================
+    //! ================================================== USERS ==================================================
 
     #[Route('/', name: 'app_admin_user_index')]
     public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
@@ -45,14 +44,12 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($userPasswordHasher->hashPassword($user, '123456'));
+            $user->setPassword($userPasswordHasher->hashPassword($user, '123456789@ABCdef'));
             $user->setPicture('defaultPicture.png');
             $user->setRoles(["ROLE_USER"]);
             $user->setZone($this->region($form->get('region')->getData()));
             $user->setDateC(new DateTime('now', new DateTimeZone('Europe/Paris')));
-
             $form->get('genre')->getData() ? $user->setGender('Homme') : $user->setGender('Femme');
-
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('crud', 'Utilisateur ajouté avec succès');
@@ -62,7 +59,6 @@ class AdminController extends AbstractController
 
         return $this->render('admin_user/index.html.twig', compact('users', 'form', 'title', 'button_label'));
     }
-
 
     #[Route('/users/delete/{id}', name: 'app_admin_user_delete')]
     public function uDelete(EntityManagerInterface $entityManager, Request $request, User $user): Response
@@ -76,18 +72,20 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-
     #[Route('/users/edit/{id}', name: 'app_admin_user_edit')]
     public function uEdit(EntityManagerInterface $entityManager, Request $request, User $user, UserRepository $userRepository): Response
     {
         $title = 'Admin Users Edit';
         $button_label = 'Modifier';
         $users = $userRepository->findAll();
-        $form = $this->createForm(AdminUserType::class, $user);
+        $region = $this->region($user->getZone());
+        $form = $this->createForm(AdminUserType::class, $user, compact('region'));
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) $form = $this->createForm(AdminUser2Type::class, $user);
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) $form = $this->createForm(AdminUser2Type::class, $user, compact('region'));
+
         if ($user->getRoles()[0] == 'ROLE_ADMIN' || $user->getRoles()[0] == 'ROLE_SUPER_ADMIN') {
             $this->addFlash('error', 'Modification interdite');
+
             return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -110,16 +108,8 @@ class AdminController extends AbstractController
         return $this->render('admin_user/index.html.twig', compact('users', 'form', 'title', 'button_label'));
     }
 
-    #[Route('/users/show/{id}', name: 'app_admin_user_show')]
-    public function uShow(User $user): Response
-    {
-        $title = 'Admin Users Show';
-        return $this->render('admin_user/show.html.twig', compact('user', 'title'));
-    }
 
-
-
-    //! =========================================================================== AIRPORT ===========================================================================
+    //! ================================================== AIRPORT ==================================================
 
     #[Route('/airport', name: 'app_admin_airport_index')]
     public function airport(AirportRepository $airportRepository, EntityManagerInterface $entityManager, Request $request): Response
@@ -132,7 +122,6 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $airport->setZone($this->region($form->get('region')->getData()));
-
             $entityManager->persist($airport);
             $entityManager->flush();
             $this->addFlash('crud', 'Aéroport ajouté avec succès');
@@ -161,9 +150,8 @@ class AdminController extends AbstractController
         $title = 'Admin Airport Edit';
         $button_label = 'Modifier';
         $airports = $airportRepository->findAll();
-        $form = $this->createForm(AdminAirportType::class, $airport, ['region' => $this->region($airport->getZone(), false)]);
+        $form = $this->createForm(AdminAirportType::class, $airport, ['region' => $this->region($airport->getZone())]);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
@@ -175,17 +163,8 @@ class AdminController extends AbstractController
         return $this->render('admin_airport/index.html.twig', compact('airports', 'form', 'title', 'button_label'));
     }
 
-    #[Route('/airport/show/{id}', name: 'app_admin_airport_show')]
-    public function aShow(Airport $airport): Response
-    {
-        $title = 'Admin Airport Show';
 
-        return $this->render('admin_airport/show.html.twig', compact('airport', 'title'));
-    }
-
-
-
-    //! =========================================================================== PARKING ===========================================================================
+    //! ================================================== PARKING ==================================================
 
     #[Route('/parking', name: 'app_admin_parking_index')]
     public function parking(Request $request, EntityManagerInterface $entityManager, ParkingRepository $parkingRepository): Response
@@ -239,7 +218,7 @@ class AdminController extends AbstractController
     }
 
 
-    //! =========================================================================== PLACES ===========================================================================
+    //! ================================================== PLACES ==================================================
 
     #[Route('/place', name: 'app_admin_place_index')]
     public function place(Request $request, EntityManagerInterface $entityManager, PlaceRepository $placeRepository): Response
@@ -248,13 +227,11 @@ class AdminController extends AbstractController
         $button_label = 'Ajouter';
         $places = $placeRepository->findAll();
         $place = new Place();
-
         $form = $this->createForm(AdminPlaceType::class, $place);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $place->setAvailable(true);
-
             $entityManager->persist($place);
             $entityManager->flush();
 
@@ -294,49 +271,23 @@ class AdminController extends AbstractController
     }
 
 
-    //! =========================================================================== FONCTIONS ===========================================================================
+    //! ================================================== FONCTIONS ==================================================
 
     #[Route('/test', name: 'app_test')]
     public function test(): Response
     {
         $title = $this->region(0);
+
         return $this->render('admin/index.html.twig', compact('title'));
     }
 
-    /**
-     * Fonction permettant de transformer un nombre en sa région ou inversement, chercher la région pour en ressortir un nombre.
-     *
-     * @param integer|string $valeur
-     * @return string|integer
-     */
     private function region(int|string $valeur): string|int
     {
         $region = ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Bretagne', 'Centre-Val de Loire', 'Corse', 'Grand Est', 'Hauts-de-France', 'Ile-de-France', 'Normandie', 'Nouvelle-Aquitaine', 'Occitanie', 'Pays de la Loire', 'Provence-Alpes-Côte d\'Azur', 'Guadeloupe', 'Guyane', 'Martinique', 'La Réunion', 'Mayotte'];
 
         if (gettype($valeur) == 'integer') return $region[$valeur];
+        array_search($valeur, $region) !== false ? $search = array_search($valeur, $region) : $search = 'Inconnu';
 
-        $search = array_search($valeur, $region) !== false ? array_search($valeur, $region) : 'Inconnu';
         return $search;
-        /*
-            foreach ($region as $i => $item) {
-                if ($item === $valeur) return $i;
-            }
-
-            for ($i = 0; $i < count($region); $i++) {
-                if ($region[$i] === $valeur) return $i;
-            }
-
-            $i = 50;
-            while ($i < count($region)) {
-                if ($region[$i] === $valeur) return $i;
-
-                $i++;
-            }
-
-            do {
-                if ($region[$i] === $valeur) return $i;
-                $i++;
-            } while ($i < count($region));
-            */
     }
 }

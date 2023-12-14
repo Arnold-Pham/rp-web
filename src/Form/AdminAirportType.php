@@ -13,6 +13,8 @@ class AdminAirportType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        isset($options['region']) ? $region = $options['region'] : $region = 7;
+
         $builder
             ->add('name', TextType::class, [
                 'attr' => ['placeholder' => ''],
@@ -56,6 +58,7 @@ class AdminAirportType extends AbstractType
                         'Mayotte' => 17
                     ]
                 ],
+                'data' => $region,
                 'label' => 'Région',
                 'mapped' => false,
                 'required' => true,
@@ -69,6 +72,7 @@ class AdminAirportType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Airport::class,
+            'region' => null
         ]);
     }
 }

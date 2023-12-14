@@ -14,10 +14,10 @@ class PersonalDataType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $this->genre = $options['genre'];
-        $this->company = $options['company'];
+        isset($options['genre']) ? $genre = $options['genre'] : $genre = 'Homme';
+        isset($options['company']) ? $company = $options['company'] : $company = null;
 
-        $this->genre == 'Homme' ? $sexe = 1 : $sexe = 0;
+        $genre == 'Homme' ? $sexe = 1 : $sexe = 0;
 
         $builder
             ->add('type', ChoiceType::class, [
@@ -41,7 +41,7 @@ class PersonalDataType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3 col'
                 ],
-                'data' => $this->company
+                'data' => $company
             ])
             ->add('lastname', TextType::class, [
                 'attr' => ['placeholder' => ''],

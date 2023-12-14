@@ -3,7 +3,69 @@
 {% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
 
 {% block body %}
+<style>
+    em {
+        color: red;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+</style>
+
 <h1>{{ title }}</h1>
 
-<section></section>
+<section>
+    <h2>Éditeur du site</h2>
+    <p>Le site <em>Nom du site</em> est édité par <em>Raison sociale de l'entreprise</em>, une entreprise enregistrée au
+        registre du commerce et des sociétés de <em>Ville</em> sous le numéro <em>Numéro RCS</em>. Son siège social est
+        situé à <em>Adresse complète</em>. Le numéro de TVA intracommunautaire de l'entreprise est <em>Numéro de
+            TVA</em>.</p>
+    <hr>
+    <h2>Contact</h2>
+    <p>Pour toute question ou information supplémentaire concernant le site <em>Nom du site</em>, veuillez nous
+        contacter aux coordonnées suivantes :</p>
+    <ul>
+        <li>Adresse e-mail : <em>Adresse e-mail de contact</em></li>
+        <li>Numéro de téléphone : <em>Numéro de téléphone</em></li>
+    </ul>
+    <hr>
+    <h2>Directeur de la publication</h2>
+    <p><em>Nom du directeur de la publication</em></p>
+    <hr>
+    <h2>Hébergement</h2>
+    <p>Le site est hébergé par <em>Nom de l'hébergeur</em>, dont le siège social est situé à <em>Adresse de
+            l'hébergeur</em>.</p>
+    <hr>
+    <h2>Propriété intellectuelle</h2>
+    <p>Le contenu de ce site (textes, images, vidéos, logos, etc.) est la propriété exclusive de <em>Raison sociale de
+            l'entreprise</em> ou de ses fournisseurs tiers. Toute reproduction ou utilisation non autorisée du contenu
+        du site est strictement interdite.</p>
+    <hr>
+    <h2>Cookies</h2>
+    <p>Ce site utilise des cookies. Les cookies sont de petits fichiers textes stockés sur votre ordinateur. Ils sont
+        largement utilisés pour permettre au site de fonctionner de manière efficace, améliorer votre expérience de
+        navigation, analyser le trafic du site et fournir des informations à des tiers pour des analyses statistiques.
+    </p>
+    <p>En utilisant ce site, vous consentez à l'utilisation de cookies conformément à la politique de cookies de <em>Nom
+            du site</em>. Vous avez la possibilité de refuser l'utilisation de cookies en configurant les paramètres de
+        votre navigateur. Veuillez noter que le refus des cookies peut affecter certaines fonctionnalités et
+        l'expérience globale de navigation sur le site.</p>
+    <hr>
+    <h2>Données personnelles</h2>
+    <p>Les informations collectées sur ce site sont destinées à <em>Raison sociale de l'entreprise</em>. Elles peuvent
+        être utilisées à des fins de traitement des demandes, de communication, d'analyse statistique, et dans le
+        respect des lois sur la protection des données personnelles. Conformément à la loi informatique et libertés,
+        vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer
+        ce droit, veuillez nous contacter à l'adresse e-mail indiquée.</p>
+    <hr>
+    <h2>Responsabilité</h2>
+    <p><em>Raison sociale de l'entreprise</em> s'efforce de fournir des informations exactes et à jour sur ce site.
+        Cependant, elle ne peut garantir l'exactitude, l'exhaustivité ou la pertinence des informations fournies. En
+        conséquence, <em>Raison sociale de l'entreprise</em> décline toute responsabilité en cas d'éventuelles erreurs
+        ou omissions dans le contenu du site.</p>
+    <hr>
+    <h2>Liens externes</h2>
+    <p>Ce site peut contenir des liens vers des sites externes. <em>Raison sociale de l'entreprise</em> décline toute
+        responsabilité quant au contenu de ces sites tiers ainsi que des éventuels dommages causés par leur utilisation.
+    </p>
+</section>
 {% endblock %}

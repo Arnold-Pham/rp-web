@@ -4,6 +4,9 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -16,6 +19,10 @@ class ContactType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'attr' => ['placeholder' => ''],
+                'constraints' => [
+                    new NotBlank(),
+                    new Email(['message' => 'L\'email {{ value }} n\'est pas une adresse valide']),
+                ],
                 'label' => 'Email',
                 'required' => true,
                 'row_attr' => [
@@ -24,6 +31,15 @@ class ContactType extends AbstractType
             ])
             ->add('sujet', TextType::class, [
                 'attr' => ['placeholder' => ''],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => 3,
+                        'max' => 100,
+                        'minMessage' => 'Le sujet est trop court',
+                        'maxMessage' => 'Le sujet est trop long'
+                    ])
+                ],
                 'label' => 'Sujet',
                 'required' => true,
                 'row_attr' => [
@@ -32,6 +48,13 @@ class ContactType extends AbstractType
             ])
             ->add('resa', TextType::class, [
                 'attr' => ['placeholder' => ''],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => 16,
+                        'max' => 16
+                    ])
+                ],
                 'label' => 'N° Réservation',
                 'required' => false,
                 'row_attr' => [
@@ -42,6 +65,15 @@ class ContactType extends AbstractType
                 'attr' => [
                     'placeholder' => '',
                     'style' => 'height: 200px'
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => 20,
+                        'max' => 2000,
+                        'minMessage' => 'Le message est trop court.',
+                        'maxMessage' => 'Le message est trop long.'
+                    ])
                 ],
                 'label' => 'Message',
                 'required' => true,

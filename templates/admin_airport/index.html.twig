@@ -41,11 +41,7 @@
         <tbody>
             {% for airport in airports %}
             <tr id="{{ airport.id }}">
-                <td>
-                    <a class="btn-bleu" href="{{ path('app_admin_airport_show', {'id': airport.id}) }}">
-                        {{ airport.id }}
-                    </a>
-                </td>
+                <td>{{ airport.id }}</td>
                 <td>{{ airport.name }}</td>
                 <td>{{ airport.iataCode }}</td>
                 <td>{{ airport.zone }}</td>

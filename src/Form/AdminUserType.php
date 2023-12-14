@@ -15,6 +15,8 @@ class AdminUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        isset($options['region']) ? $region = $options['region'] : $region = 7;
+
         $builder
             ->add('lastname', TextType::class, [
                 'attr' => ['placeholder' => ''],
@@ -74,6 +76,7 @@ class AdminUserType extends AbstractType
                         'Mayotte' => 17
                     ]
                 ],
+                'data' => $region,
                 'label' => 'Région',
                 'mapped' => false,
                 'required' => true,
@@ -100,6 +103,7 @@ class AdminUserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'region' => null
         ]);
     }
 }
