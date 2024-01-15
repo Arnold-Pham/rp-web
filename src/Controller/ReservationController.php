@@ -138,7 +138,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('app_infos_persos', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reservation/index.html.twig', compact('title', 'form'));
+        return $this->render('main/resa/index.html.twig', compact('title', 'form'));
     }
 
     #[Route('/information', name: 'app_infos_persos')]
@@ -180,7 +180,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('app_car', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reservation/index.html.twig', compact('title', 'form'));
+        return $this->render('main/resa/index.html.twig', compact('title', 'form'));
     }
 
     #[Route('/voiture', name: 'app_car')]
@@ -208,7 +208,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('app_adresse', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reservation/index.html.twig', compact('title', 'form'));
+        return $this->render('main/resa/index.html.twig', compact('title', 'form'));
     }
 
     #[Route('/adresse', name: 'app_adresse')]
@@ -246,7 +246,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('yeah', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reservation/index.html.twig', compact('title', 'form'));
+        return $this->render('main/resa/index.html.twig', compact('title', 'form'));
     }
 
     #[Route('/facture', name: 'app_invoice')]
@@ -279,7 +279,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('yeah', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reservation/index.html.twig', compact('title', 'form'));
+        return $this->render('main/resa/index.html.twig', compact('title', 'form'));
     }
 
     #[Route('/paiement', name: 'yeah')]
@@ -294,6 +294,6 @@ class ReservationController extends AbstractController
         $title = 'Paiement';
 
 
-        return $this->render('reservation/paiement.html.twig', compact('title', 'code'));
+        return $this->render('main/resa/paiement.html.twig', compact('title', 'code'));
     }
 }

@@ -65,7 +65,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_user/index.html.twig', compact('users', 'form', 'title', 'button_label'));
+        return $this->render('admin/user.html.twig', compact('users', 'form', 'title', 'button_label'));
     }
 
     #[Route('/users/delete/{id}', name: 'app_admin_user_delete')]
@@ -113,7 +113,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_user/index.html.twig', compact('users', 'form', 'title', 'button_label'));
+        return $this->render('admin/user.html.twig', compact('users', 'form', 'title', 'button_label'));
     }
 
 
@@ -139,7 +139,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_airport_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_airport/index.html.twig', compact('airports', 'title', 'form'));
+        return $this->render('admin/airport.html.twig', compact('airports', 'title', 'form'));
     }
 
     #[Route('/airport/delete/{id}', name: 'app_admin_airport_delete')]
@@ -170,7 +170,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_airport_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_airport/index.html.twig', compact('airports', 'form', 'title', 'button_label'));
+        return $this->render('admin/airport.html.twig', compact('airports', 'form', 'title', 'button_label'));
     }
 
 
@@ -195,7 +195,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_parking_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_parking/index.html.twig', compact('parkings', 'form', 'title'));
+        return $this->render('admin/parking.html.twig', compact('parkings', 'form', 'title'));
     }
 
     #[Route('/parking/delete/{id}', name: 'app_admin_parking_delete')]
@@ -226,7 +226,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_parking_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_parking/index.html.twig', compact('parkings', 'form', 'title', 'button_label'));
+        return $this->render('admin/parking.html.twig', compact('parkings', 'form', 'title', 'button_label'));
     }
 
 
@@ -252,7 +252,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_place_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_place/index.html.twig', compact('title', 'form', 'places', 'button_label'));
+        return $this->render('admin/place.html.twig', compact('title', 'form', 'places', 'button_label'));
     }
 
     #[Route('/place/delete/{id}', name: 'app_admin_place_delete')]
@@ -281,7 +281,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_place_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_place/index.html.twig', compact('title', 'form', 'places', 'button_label'));
+        return $this->render('admin/place.html.twig', compact('title', 'form', 'places', 'button_label'));
     }
 
 
@@ -306,7 +306,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_resa_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_resa/index.html.twig', compact('title', 'form', 'reservations', 'button_label'));
+        return $this->render('admin/resa.html.twig', compact('title', 'form', 'reservations', 'button_label'));
     }
 
     #[Route('/resa/delete/{id}', name: 'app_admin_resa_delete')]
@@ -335,7 +335,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_resa_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_resa/index.html.twig', compact('title', 'form', 'reservations', 'button_label'));
+        return $this->render('admin/resa.html.twig', compact('title', 'form', 'reservations', 'button_label'));
     }
 
 
@@ -360,7 +360,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_infos/index.html.twig', compact('title', 'form', 'datas', 'button_label'));
+        return $this->render('admin/infos.html.twig', compact('title', 'form', 'datas', 'button_label'));
     }
 
     #[Route('/infos/delete/{id}', name: 'app_admin_infos_delete')]
@@ -389,7 +389,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin_infos/index.html.twig', compact('title', 'form', 'datas', 'button_label'));
+        return $this->render('admin/infos.html.twig', compact('title', 'form', 'datas', 'button_label'));
     }
 
 
