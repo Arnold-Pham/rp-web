@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use DateTime;
 use DateTimeZone;
 use App\Entity\Car;
@@ -11,6 +12,7 @@ use App\Entity\Address;
 use App\Form\AddressType;
 use App\Entity\Reservation;
 use App\Entity\PersonalData;
+use App\Form\CodeSearchType;
 use App\Form\ReservationType;
 use App\Form\PersonalDataType;
 use App\Form\AddressInvoiceType;
@@ -20,53 +22,58 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 class ReservationController extends AbstractController
 {
+    //§ ---------------------------------------------------------------------------------------------------------------
+    //! ================================================== FONCTIONS ==================================================
+    //§ ---------------------------------------------------------------------------------------------------------------
+
     private function codeCookie(Request $request): string
     {
         if (isset($_COOKIE['road'])) {
             $code_road = $_COOKIE['road'];
             unset($_COOKIE['road']);
         } else {
-            $code_road = hash('xxh64', uniqid());
+            $code_road = strtoupper(hash('xxh64', uniqid()));
         }
 
         setcookie('road', $code_road, time() + (60 * 60 * 24 * 3), '/', $request->getHost(), true);
         return $code_road;
     }
 
-    #[Route('/verif', name: 'verif')]
+    private function codeDel(): string
+    {
+        $code_road = $_COOKIE['road'];
+        unset($_COOKIE['road']);
+        return $code_road;
+    }
+
+    //§ ------------------------------------------------------------------------------------------------------------------
+    //! ================================================== VÉRIFICATION ==================================================
+    //§ ------------------------------------------------------------------------------------------------------------------
+
+    #[Route('/verification', name: 'verif')]
     public function verif(Request $request, ReservationRepository $reservationRepository): Response
     {
-        $form = $this->createFormBuilder()
-            ->add('code', TextType::class, [
-                'label' => 'Code de réservation',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Vérifier',
-            ])
-            ->getForm();
-
+        $title = 'Réservation';
+        $form = $this->createForm(CodeSearchType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $code = $form->get('code')->getData();
 
-            $reservation = $reservationRepository->findOneBy(['code' => $code, 'status' => 'Payé']);
+            $reservation = $reservationRepository->findOneBy(['code' => strtoupper($code)]);
 
             if ($reservation instanceof Reservation) {
-                return $this->redirectToRoute('resa', ['code' => $code], Response::HTTP_FOUND);
+                return $this->redirectToRoute('resa', ['code' => strtoupper($code)], Response::HTTP_FOUND);
             } else {
-                $this->addFlash('erreur', 'Code de réservation incorrect.');
-                return $this->redirectToRoute('verif');
+                $this->addFlash('error', 'Code de réservation incorrect.');
             }
         }
 
-        // faire la route
-        return $this->render('main/index.html.twig', compact('title', 'form'));
+        return $this->render('main/code.html.twig', compact('title', 'form'));
     }
 
     #[Route('/reservation/{code}', name: 'resa')]
@@ -74,12 +81,17 @@ class ReservationController extends AbstractController
     {
         $title = 'Récapitulatif';
 
-        $code = $reservationRepository->findOneBy(['code' => $code, 'status' => 'Payé']);
-        if ($code === null) return $this->redirectToRoute('choix', [], Response::HTTP_SEE_OTHER);
+        $verif = $reservationRepository->findOneBy(['code' => strtoupper($code)]);
+        if ($verif === null) return $this->redirectToRoute('app_main', [], Response::HTTP_SEE_OTHER);
+        $genre = $verif->getPersonalData()->getGender() == 'Homme' ? 'monsieur' : 'madame';
+        $prenom = $genre . ' ' . $verif->getPersonalData()->getFirstname() . ' ' . $verif->getPersonalData()->getLastname() . '.';
 
-        return $this->render('main/index.html.twig', compact('title'));
+        return $this->render('main/resume.html.twig', compact('title', 'verif', 'prenom'));
     }
 
+    //§ ------------------------------------------------------------------------------------------------------------------
+    //! ================================================== RÉSERVATIONS ==================================================
+    //§ ------------------------------------------------------------------------------------------------------------------
 
     #[Route('/reservation', name: 'app_reservation')]
     public function index(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
@@ -129,13 +141,12 @@ class ReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
     }
 
-
     #[Route('/information', name: 'app_infos_persos')]
     public function infos(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
         $code_road = $this->codeCookie($request);
 
-        $title = 'Information Personnel';
+        $title = 'Informations Personnels';
         $reservation = $reservationRepository->findOneBy(['code' => $code_road]);
         if ($reservation === null) return $this->redirectToRoute('app_reservation', [], Response::HTTP_SEE_OTHER);
 
@@ -172,7 +183,6 @@ class ReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
     }
 
-
     #[Route('/voiture', name: 'app_car')]
     public function car(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
@@ -200,7 +210,6 @@ class ReservationController extends AbstractController
 
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
     }
-
 
     #[Route('/adresse', name: 'app_adresse')]
     public function address(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
@@ -240,7 +249,6 @@ class ReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
     }
 
-
     #[Route('/facture', name: 'app_invoice')]
     public function invoice(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
@@ -274,11 +282,18 @@ class ReservationController extends AbstractController
         return $this->render('reservation/index.html.twig', compact('title', 'form'));
     }
 
-    #[Route('/youhou', name: 'yeah')]
-    public function yeah(): Response
+    #[Route('/paiement', name: 'yeah')]
+    public function yeah(EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
-        $title = 'Yeah ça a redirigé';
+        $code = strtoupper($this->codeDel());
+        $reservation = $reservationRepository->findOneBy(['code' => $code]);
+        $reservation->setDateC(new DateTime('now', new DateTimeZone('Europe/Paris')));
+        $entityManager->persist($reservation);
+        $entityManager->flush();
 
-        return $this->render('main/index.html.twig', compact('title'));
+        $title = 'Paiement';
+
+
+        return $this->render('reservation/paiement.html.twig', compact('title', 'code'));
     }
 }

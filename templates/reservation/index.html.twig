@@ -11,4 +11,46 @@
     <button type="submit">Envoyer</button>
     {{ form_end(form)}}
 </section>
+
+{% if title == 'Réservation' %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkbox = document.querySelector('.defcoch');
+        var classA = document.querySelectorAll('.defbloc');
+        var classB = document.querySelector('.defnone');
+
+        checkbox.addEventListener('change', function () {
+            classA.forEach(function (element) {
+                element.style.display = checkbox.checked ? 'block' : 'none';
+            });
+
+            classB.style.display = checkbox.checked ? 'none' : 'block';
+        });
+    });
+</script>
+{% elseif title == 'Informations Personnels' %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var radioParticulier = document.querySelector('input[value="0"]');
+        var radioEntreprise = document.querySelector('input[value="1"]');
+        var inputEntreprise = document.querySelector('.defnone');
+
+        function toggleInputEntreprise() {
+            radioEntreprise.checked ? inputEntreprise.style.display = 'block' : inputEntreprise.style.display = 'none';
+        }
+
+        radioParticulier.addEventListener('change', toggleInputEntreprise);
+        radioEntreprise.addEventListener('change', toggleInputEntreprise);
+        toggleInputEntreprise();
+
+        var input = document.querySelector('.tel');
+
+        input.addEventListener('input', function () {
+            if (!this.value.startsWith('0')) {
+                this.value = '0' + this.value;
+            }
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

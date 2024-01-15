@@ -24,7 +24,9 @@
     <main class="container">
         {% block body %}{% endblock %}
     </main>
+    {% if title != 'Connexion' %}
     {% include "commun/footer.html.twig" %}
+    {% endif %}
 </body>
 
 </html>

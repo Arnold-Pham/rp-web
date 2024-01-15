@@ -21,51 +21,30 @@ class PersonalDataType extends AbstractType
 
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => 'Type d\'utilisateur',
                 'attr' => ['placeholder' => ''],
                 'choices' => [
                     'Particulier' => 0,
                     'Entreprise' => 1,
                 ],
-                'required' => true,
+                'data' => 0,
                 'expanded' => true,
+                'label' => 'Réserver en tant que:',
+                'required' => true,
                 'row_attr' => [
                     'class' => 'mb-3'
                 ]
             ])
             ->add('company', TextType::class, [
-                'attr' => ['placeholder' => ''],
+                'attr' => [
+                    'placeholder' => ''
+                ],
                 'label' => 'Nom de l\'entreprise',
                 'mapped' => false,
                 'required' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
+                    'class' => 'form-floating mb-3 col defnone'
                 ],
                 'data' => $company
-            ])
-            ->add('lastname', TextType::class, [
-                'attr' => ['placeholder' => ''],
-                'label' => 'Nom de famille',
-                'required' => true,
-                'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
-                ]
-            ])
-            ->add('firstname', TextType::class, [
-                'attr' => ['placeholder' => ''],
-                'label' => 'Prénom',
-                'required' => true,
-                'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
-                ]
-            ])
-            ->add('phoneNumber', NumberType::class, [
-                'attr' => ['placeholder' => ''],
-                'label' => 'Numéro de téléphone',
-                'required' => true,
-                'row_attr' => [
-                    'class' => 'form-floating mb-3'
-                ]
             ])
             ->add('genre',  ChoiceType::class, [
                 'attr' => ['placeholder' => ''],
@@ -80,6 +59,33 @@ class PersonalDataType extends AbstractType
                     'class' => 'form-floating mb-3'
                 ],
                 'data' => $sexe
+            ])
+            ->add('firstname', TextType::class, [
+                'attr' => ['placeholder' => ''],
+                'label' => 'Prénom',
+                'required' => true,
+                'row_attr' => [
+                    'class' => 'form-floating mb-3 col'
+                ]
+            ])
+            ->add('lastname', TextType::class, [
+                'attr' => ['placeholder' => ''],
+                'label' => 'Nom de famille',
+                'required' => true,
+                'row_attr' => [
+                    'class' => 'form-floating mb-3 col'
+                ]
+            ])
+            ->add('phoneNumber', NumberType::class, [
+                'attr' => [
+                    'class' => 'tel',
+                    'placeholder' => ''
+                ],
+                'label' => 'Numéro de téléphone',
+                'required' => true,
+                'row_attr' => [
+                    'class' => 'form-floating mb-3'
+                ]
             ]);
     }
 

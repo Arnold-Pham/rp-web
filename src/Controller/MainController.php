@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Form\ContactType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class MainController extends AbstractController
 {
@@ -27,19 +30,18 @@ class MainController extends AbstractController
 
 
     #[Route('/contact', name: 'app_contact')]
-    public function contact(Request $request): Response
+    public function contact(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $title = 'Contact';
+        $title = 'Formulaire de contact';
         $button_label = 'Envoyer';
-        $form = $this->createForm(ContactType::class);
+        $contact = new Contact;
+        $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            $resa = $form->get('resa')->getData();
-            $text = $form->get('text')->getData();
-            $sujet = $form->get('sujet')->getData();
-            $this->addFlash('envoyer', $email . ' /// ' . $sujet . ' /// ' . $text . ' /// ' . $resa);
+            $entityManager->persist($contact);
+            $entityManager->flush();
+            $this->addFlash('envoyer', 'Message envoyé avec succès.');
 
             return $this->redirectToRoute('app_contact', [], Response::HTTP_SEE_OTHER);
         }

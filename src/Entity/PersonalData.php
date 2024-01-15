@@ -40,8 +40,8 @@ class PersonalData
 
     #[ORM\Column]
     #[Assert\Positive]
-    #[Assert\LessThan(value: 800000000, message: 'Le numéro doit commencer par 06 ou 07.')]
-    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro doit commencer par 06 ou 07.')]
+    #[Assert\LessThan(value: 800000000, message: 'Le numéro doit avoir dix chiffres et commencer par 06 ou 07.')]
+    #[Assert\GreaterThanOrEqual(value: 600000000, message: 'Le numéro doit avoir dix chiffres et commencer par 06 ou 07.')]
     private ?int $phoneNumber = null;
 
     #[ORM\Column]

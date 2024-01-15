@@ -9,18 +9,24 @@ use App\Entity\User;
 use App\Entity\Place;
 use App\Entity\Airport;
 use App\Entity\Parking;
+use App\Entity\Reservation;
 use App\Form\AdminUserType;
+use App\Entity\PersonalData;
 use App\Form\AdminPlaceType;
 use App\Form\AdminUser2Type;
 use App\Form\AdminPlace2Type;
 use App\Form\AdminAirportType;
 use App\Form\AdminParkingType;
 use App\Form\AdminParking2Type;
+use App\Form\AdminReservationType;
 use App\Repository\UserRepository;
+use App\Form\AdminPersonalDataType;
 use App\Repository\PlaceRepository;
 use App\Repository\AirportRepository;
 use App\Repository\ParkingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
+use App\Repository\PersonalDataRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +37,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
+    //§ -----------------------------------------------------------------------------------------------------------
     //! ================================================== USERS ==================================================
+    //§ -----------------------------------------------------------------------------------------------------------
 
     #[Route('/', name: 'app_admin_user_index')]
     public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
@@ -109,7 +117,9 @@ class AdminController extends AbstractController
     }
 
 
+    //§ -------------------------------------------------------------------------------------------------------------
     //! ================================================== AIRPORT ==================================================
+    //§ -------------------------------------------------------------------------------------------------------------
 
     #[Route('/airport', name: 'app_admin_airport_index')]
     public function airport(AirportRepository $airportRepository, EntityManagerInterface $entityManager, Request $request): Response
@@ -164,7 +174,9 @@ class AdminController extends AbstractController
     }
 
 
+    //§ -------------------------------------------------------------------------------------------------------------
     //! ================================================== PARKING ==================================================
+    //§ -------------------------------------------------------------------------------------------------------------
 
     #[Route('/parking', name: 'app_admin_parking_index')]
     public function parking(Request $request, EntityManagerInterface $entityManager, ParkingRepository $parkingRepository): Response
@@ -218,12 +230,14 @@ class AdminController extends AbstractController
     }
 
 
+    //§ ------------------------------------------------------------------------------------------------------------
     //! ================================================== PLACES ==================================================
+    //§ ------------------------------------------------------------------------------------------------------------
 
     #[Route('/place', name: 'app_admin_place_index')]
     public function place(Request $request, EntityManagerInterface $entityManager, PlaceRepository $placeRepository): Response
     {
-        $title = 'Places de parking';
+        $title = 'Admin Places';
         $button_label = 'Ajouter';
         $places = $placeRepository->findAll();
         $place = new Place();
@@ -255,7 +269,7 @@ class AdminController extends AbstractController
     #[Route('/place/edit/{id}', name: 'app_admin_place_edit')]
     public function plEdit(Request $request, Place $place, EntityManagerInterface $entityManager, PlaceRepository $placeRepository): Response
     {
-        $title = 'Places de parking';
+        $title = 'Admin Places Edit';
         $button_label = 'Modifier';
         $places = $placeRepository->findAll();
         $form = $this->createForm(AdminPlace2Type::class, $place);
@@ -271,15 +285,117 @@ class AdminController extends AbstractController
     }
 
 
-    //! ================================================== FONCTIONS ==================================================
+    //§ ------------------------------------------------------------------------------------------------------------
+    //! =============================================== RÉSERVATION ================================================
+    //§ ------------------------------------------------------------------------------------------------------------
 
-    #[Route('/test', name: 'app_test')]
-    public function test(): Response
+    #[Route('/resa', name: 'app_admin_resa_index')]
+    public function resa(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
-        $title = $this->region(0);
+        $title = 'Admin Réservation';
+        $button_label = 'Ajouter';
+        $reservations = $reservationRepository->findAll();
+        $reservation = new Reservation();
+        $form = $this->createForm(AdminReservationType::class, $reservation);
+        $form->handleRequest($request);
 
-        return $this->render('admin/index.html.twig', compact('title'));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_resa_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_resa/index.html.twig', compact('title', 'form', 'reservations', 'button_label'));
     }
+
+    #[Route('/resa/delete/{id}', name: 'app_admin_resa_delete')]
+    public function rDelete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_admin_resa_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/resa/edit/{id}', name: 'app_admin_resa_edit')]
+    public function rEdit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
+    {
+        $title = 'Admin Réservation Edit';
+        $button_label = 'Modifier';
+        $reservations = $reservationRepository->findAll();
+        $form = $this->createForm(AdminReservationType::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_resa_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_resa/index.html.twig', compact('title', 'form', 'reservations', 'button_label'));
+    }
+
+
+    //§ ------------------------------------------------------------------------------------------------------------
+    //! =============================================== RÉSERVATION ================================================
+    //§ ------------------------------------------------------------------------------------------------------------
+
+    #[Route('/infos', name: 'app_admin_infos_index')]
+    public function infos(Request $request, EntityManagerInterface $entityManager, PersonalDataRepository $personalDataRepository): Response
+    {
+        $title = 'Admin Infos';
+        $button_label = 'Ajouter';
+        $datas = $personalDataRepository->findAll();
+        $data = new PersonalData();
+        $form = $this->createForm(AdminPersonalDataType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($data);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_infos/index.html.twig', compact('title', 'form', 'datas', 'button_label'));
+    }
+
+    #[Route('/infos/delete/{id}', name: 'app_admin_infos_delete')]
+    public function iDelete(Request $request, PersonalData $personalData, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $personalData->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($personalData);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/infos/edit/{id}', name: 'app_admin_infos_edit')]
+    public function iEdit(Request $request, PersonalData $personalData, EntityManagerInterface $entityManager, PersonalDataRepository $personalDataRepository): Response
+    {
+        $title = 'Admin Infos Edit';
+        $button_label = 'Modifier';
+        $datas = $personalDataRepository->findAll();
+        $form = $this->createForm(AdminPersonalDataType::class, $personalData);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_infos/index.html.twig', compact('title', 'form', 'datas', 'button_label'));
+    }
+
+
+    //§ ---------------------------------------------------------------------------------------------------------------
+    //! ================================================== FONCTIONS ==================================================
+    //§ ---------------------------------------------------------------------------------------------------------------
 
     private function region(int|string $valeur): string|int
     {

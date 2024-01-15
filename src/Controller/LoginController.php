@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 class LoginController extends AbstractController
 {
@@ -23,7 +25,6 @@ class LoginController extends AbstractController
 
         return $this->render('security/login.html.twig', compact('last_username', 'error', 'title'));
     }
-
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void

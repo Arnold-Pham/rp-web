@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section class="mt-4">
+    {% for message in app.flashes('crud') %}
+    <div class="msg-y">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="msg-n">{{ message }}</div>
+    {% endfor %}
+</section>
+
+<section>
+    <p>Bonjour, {{ prenom }}</p>
+    <p>Voici le récapitulatif de votre réservation chez RoissyParks. Pour toute correction ou tout changement, merci de
+        bien vouloir contacter le service client.</p>
+    <div>
+        <p>
+            Status de la réservation:
+            {% if verif.status == 'Awaiting' %}
+            <span class="bg-warning">En attente</span>
+            {% elseif verif.status == 'Done' %}
+            <span class="bg-success">Finie</span>
+            {% elseif verif.status == 'Canceled' %}
+            <span class="bg-danger">Annulée</span>
+            {% endif %}
+        </p>
+    </div>
+    <div class="rounded w-50 py-3 text-center m-auto mb-3 voyage border border-3">
+        <div class="px-3">
+            <h2>Aller</h2>
+            <p>N° de vol: <a href="https://fr.flightaware.com/live/flight/{{verif.flightA}}">{{ verif.flightA }}</a></p>
+            <p>Date: {{ verif.dateA | date('d/m/Y H:i') }}</p>
+        </div>
+        <hr>
+        <div class="px-3">
+            <h2>Retour</h2>
+            <p>N° de vol: <a href="https://fr.flightaware.com/live/flight/{{verif.flightB}}">{{ verif.flightB }}</a></p>
+            <p>Date: {{ verif.dateB | date('d/m/Y H:i') }}</p>
+        </div>
+    </div>
+    {{ dump(verif) }}
+</section>
+{% endblock %}

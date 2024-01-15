@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section class="mt-4">
+    {% for message in app.flashes('crud') %}
+    <div class="msg-y">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="msg-n">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, { 'attr': {'class': 'form-style'} }) }}
+    {{ form_widget(form) }}
+    <div class="flex">
+        <button class="btn-main">{{ button_label|default('Chercher') }}</button>
+    </div>
+    {{ form_end(form) }}
+</section>
+{% endblock %}

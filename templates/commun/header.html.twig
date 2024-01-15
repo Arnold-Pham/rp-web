@@ -24,7 +24,10 @@
             </a>
         </div>
         <div>
-            <a href="{{ path('app_reservation') }}">Réservation</a>
+            <a href="{{ path('app_reservation') }}">Réserver</a>
+            -
+            <a href="{{ path('verif') }}">Voir Réservation</a>
+            -
             <a href="{{ path('app_contact') }}">Contact</a>
         </div>
     </nav>
@@ -43,9 +46,11 @@
                 <summary>
                     Admin
                 </summary>
-                <a href="{{path('app_admin_user_index')}}">&emsp;Utilisateur</a>
-                <a href="{{path('app_admin_airport_index')}}">&emsp;Airport</a>
-                <a href="{{path('app_admin_parking_index')}}">&emsp;Parking</a>
+                <a href="{{path('app_admin_user_index')}}">Utilisateur</a>
+                <a href="{{path('app_admin_airport_index')}}">Airport</a>
+                <a href="{{path('app_admin_parking_index')}}">Parking</a>
+                <a href="{{path('app_admin_resa_index')}}">Réservation</a>
+                <a href="{{path('app_admin_infos_index')}}">Informations</a>
             </details>
             {% endif %}
             <a class="hovered" href="{{ path('app_logout') }}">Déconnexion</a>

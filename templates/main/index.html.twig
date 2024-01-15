@@ -3,7 +3,11 @@
 {% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
 
 {% block body %}
-<h1>{{ title }}</h1>
-
-<section></section>
+<section>
+    <div class="banner">
+        <div class="img"></div>
+        <img src="{{ asset('common/logo_texte/logo_512.webp') }}" alt="Logo de l'entreprise" class="logo-main">
+        <a href="{{ path('app_reservation') }}" class="btn-home">Réserver</a>
+    </div>
+</section>
 {% endblock %}

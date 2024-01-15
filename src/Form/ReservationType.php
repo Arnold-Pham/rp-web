@@ -84,6 +84,10 @@ class ReservationType extends AbstractType
                 ]
             ])
             ->add('valet', CheckboxType::class, [
+                'attr' => [
+                    'checked' => 'checked',
+                    'class' => 'defcoch'
+                ],
                 'label' => 'Voiturier',
                 'required' => false,
                 'row_attr' => [
@@ -96,7 +100,7 @@ class ReservationType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
+                    'class' => 'form-floating mb-3 col defbloc'
                 ]
             ])
             ->add('extra2', CheckboxType::class, [
@@ -105,7 +109,7 @@ class ReservationType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
+                    'class' => 'form-floating mb-3 col defbloc'
                 ]
             ])
             ->add('extra3', CheckboxType::class, [
@@ -114,7 +118,7 @@ class ReservationType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
+                    'class' => 'form-floating mb-3 col defbloc'
                 ]
             ])
             ->add('parking', EntityType::class, [
@@ -123,7 +127,7 @@ class ReservationType extends AbstractType
                 'class' => Parking::class,
                 'required' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3 col'
+                    'class' => 'form-floating mb-3 col defnone'
                 ]
             ]);
     }

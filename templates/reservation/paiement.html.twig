@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section class="text-center">
+    <p>Votre code de réservation est: <span class="text-decoration-underline text-primary">{{ code }}</span></p>
+    <p>Aller à ma <a class="btn-bleu" href="{{ path('resa', {'code': code}) }}">Réservation</a></p>
+</section>
+{% endblock %}

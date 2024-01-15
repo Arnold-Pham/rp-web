@@ -66,42 +66,6 @@
   justify-content: center;
 }
 
-body::after {
-  content: "XS";
-  color: red;
-  font-size: 2rem;
-  font-weight: bold;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 999;
-}
-
-@media (min-width: 576px) {
-  body::after {
-    content: "SM";
-  }
-}
-@media (min-width: 768px) {
-  body::after {
-    content: "MD";
-  }
-}
-@media (min-width: 992px) {
-  body::after {
-    content: "LG";
-  }
-}
-@media (min-width: 1200px) {
-  body::after {
-    content: "XL";
-  }
-}
-@media (min-width: 1400px) {
-  body::after {
-    content: "XXL";
-  }
-}
 * {
   font-family: "Nunito", sans-serif !important;
   box-sizing: border-box;
@@ -228,7 +192,7 @@ header nav .menu-burger-btn:hover {
 
 main {
   padding: 30px 0;
-  min-height: 100vh;
+  min-height: calc(100vh - 4rem - 100px);
 }
 main h1 {
   margin-bottom: 25px;
@@ -296,8 +260,76 @@ main section table tbody tr td {
   padding: 8px 0;
   cursor: default;
 }
+main section .banner {
+  height: calc(100vh - 4rem - 100px);
+  width: 100vw;
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+main section .banner .img {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+}
+main section .banner .img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0.3;
+  background: url("https://media.discordapp.net/attachments/818549338027458580/1196403248454709350/UnAXlFk.webp?ex=65b7805a&is=65a50b5a&hm=da20af216fefec7be29179499c71c033e44817e07e9e83d3301cc597e197f4fc&=&format=webp&width=1173&height=670") no-repeat center center;
+  background-size: cover;
+}
+main section .banner .logo-main {
+  margin-bottom: 50px;
+  height: 50%;
+}
+main section .banner .btn-home {
+  text-decoration: none;
+  color: black;
+  border: 3px solid #DDD;
+  font-size: 150%;
+  display: flex;
+  justify-content: center;
+  height: 10%;
+  width: 75%;
+  align-items: center;
+  background: white;
+  padding: 15px;
+}
 main hr {
   margin: 2rem;
+}
+main .voyage {
+  position: relative;
+}
+main .voyage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0.3;
+  background: url("https://cdn.discordapp.com/attachments/818549338027458580/1196388820569038888/kb2pVzs.webp?ex=65b772ea&is=65a4fdea&hm=1d0e8d9b4257fa533faf1c683cf1bf2bc584d39aeaccba43ca5a5f6cc8323151&") no-repeat center center;
+  background-size: cover;
+}
+
+form .defnone {
+  display: none;
+}
+form .defbloc {
+  display: block;
 }
 
 footer {

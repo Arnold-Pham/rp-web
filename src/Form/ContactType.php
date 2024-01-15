@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Contact;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -46,10 +47,9 @@ class ContactType extends AbstractType
                     'class' => 'form-floating mb-3'
                 ]
             ])
-            ->add('resa', TextType::class, [
+            ->add('reservation', TextType::class, [
                 'attr' => ['placeholder' => ''],
                 'constraints' => [
-                    new NotBlank(),
                     new Length([
                         'min' => 16,
                         'max' => 16
@@ -61,7 +61,7 @@ class ContactType extends AbstractType
                     'class' => 'form-floating mb-3'
                 ]
             ])
-            ->add('text', TextareaType::class, [
+            ->add('texte', TextareaType::class, [
                 'attr' => [
                     'placeholder' => '',
                     'style' => 'height: 200px'
@@ -86,7 +86,7 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => Contact::class
         ]);
     }
 }

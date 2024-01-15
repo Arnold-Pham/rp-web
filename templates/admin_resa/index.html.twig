@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {% for message in app.flashes('crud') %}
+    <div class="msg-y">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="msg-n">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, { 'attr': {'class': 'form-style'} }) }}
+    {{ form_widget(form) }}
+    <div class="flex">
+        <button class="btn-main">{{ button_label|default('Ajouter') }}</button>
+    </div>
+    {{ form_end(form) }}
+</section>
+
+<hr>
+<section>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Code Réservation</th>
+                <th scope="col">Infos</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date A</th>
+                <th scope="col">Vol A</th>
+                <th scope="col">Date B</th>
+                <th scope="col">Vol B</th>
+                <th scope="col">Voiturier</th>
+                <th scope="col">DateC</th>
+                <th scope="col">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr id="{{reservation.id}}">
+                <td>{{ reservation.status }}</td>
+                <td>{{ reservation.code }}</td>
+                <td>{{ reservation.personalData.id }}</td>
+                <td>{{ reservation.email }}</td>
+                <td>{{ reservation.dateA ? reservation.dateA | date('Y-m-d H:i') : '' }}</td>
+                <td>{{ reservation.flightA }}</td>
+                <td>{{ reservation.dateB ? reservation.dateB | date('Y-m-d H:i') : '' }}</td>
+                <td>{{ reservation.flightB }}</td>
+                <td>{{ reservation.valet ? 'Oui' : 'Non' }}</td>
+                <td>{{ reservation.dateC ? reservation.dateC | date('Y-m-d H:i') : '' }}</td>
+                <td>
+                    <div class="flex center">
+                        <a class="btn-bleu" href="{{ path('app_admin_resa_edit', {'id': reservation.id}) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form method="POST" action="{{ path('app_admin_resa_delete', {'id': reservation.id}) }}"
+                            onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet élémént ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+                            <button class="btn-rouge"><i class="bi bi-trash3-fill"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
