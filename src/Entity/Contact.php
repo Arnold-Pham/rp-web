@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
@@ -25,6 +27,7 @@ class Contact
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $texte = null;
+
 
     public function getId(): ?int
     {

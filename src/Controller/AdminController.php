@@ -5,8 +5,11 @@ namespace App\Controller;
 
 use DateTime;
 use DateTimeZone;
+use App\Entity\Car;
 use App\Entity\User;
 use App\Entity\Place;
+use App\Form\CarType;
+use App\Entity\Address;
 use App\Entity\Airport;
 use App\Entity\Parking;
 use App\Entity\Reservation;
@@ -18,10 +21,13 @@ use App\Form\AdminPlace2Type;
 use App\Form\AdminAirportType;
 use App\Form\AdminParkingType;
 use App\Form\AdminParking2Type;
+use App\Form\AddressInvoiceType;
+use App\Repository\CarRepository;
 use App\Form\AdminReservationType;
 use App\Repository\UserRepository;
 use App\Form\AdminPersonalDataType;
 use App\Repository\PlaceRepository;
+use App\Repository\AddressRepository;
 use App\Repository\AirportRepository;
 use App\Repository\ParkingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -326,7 +332,9 @@ class AdminController extends AbstractController
         $title = 'Admin Réservation Edit';
         $button_label = 'Modifier';
         $reservations = $reservationRepository->findAll();
-        $form = $this->createForm(AdminReservationType::class, $reservation);
+        $extra = 0;
+        if ($reservation->getOption() !== null) $extra = $reservation->getOption()->getExtra();
+        $form = $this->createForm(AdminReservationType::class, $reservation, compact('extra'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -338,11 +346,6 @@ class AdminController extends AbstractController
         return $this->render('admin/resa.html.twig', compact('title', 'form', 'reservations', 'button_label'));
     }
 
-
-    //§ ------------------------------------------------------------------------------------------------------------
-    //! =============================================== RÉSERVATION ================================================
-    //§ ------------------------------------------------------------------------------------------------------------
-
     #[Route('/infos', name: 'app_admin_infos_index')]
     public function infos(Request $request, EntityManagerInterface $entityManager, PersonalDataRepository $personalDataRepository): Response
     {
@@ -350,10 +353,16 @@ class AdminController extends AbstractController
         $button_label = 'Ajouter';
         $datas = $personalDataRepository->findAll();
         $data = new PersonalData();
-        $form = $this->createForm(AdminPersonalDataType::class, $data);
+        $genre = 'Homme';
+        $company = null;
+
+        $form = $this->createForm(AdminPersonalDataType::class, $data, compact('genre', 'company'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $form->get('genre')->getData() ? $data->setGender('Homme') : $data->setGender('Femme');
+            $data->setCompanyName($form->get('company')->getData());
+
             $entityManager->persist($data);
             $entityManager->flush();
 
@@ -380,7 +389,13 @@ class AdminController extends AbstractController
         $title = 'Admin Infos Edit';
         $button_label = 'Modifier';
         $datas = $personalDataRepository->findAll();
-        $form = $this->createForm(AdminPersonalDataType::class, $personalData);
+
+        if ($personalData === null)
+            return $this->redirectToRoute('app_admin_infos_index', [], Response::HTTP_SEE_OTHER);
+        $genre = $personalData->getGender();
+
+        if ($personalData->getCompanyName() !== null) $company = $personalData->getCompanyName();
+        $form = $this->createForm(AdminPersonalDataType::class, $personalData, compact('genre', 'company'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -390,6 +405,106 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/infos.html.twig', compact('title', 'form', 'datas', 'button_label'));
+    }
+
+    #[Route('/voiture', name: 'app_admin_car_index')]
+    public function voiture(Request $request, EntityManagerInterface $entityManager, CarRepository $carRepository): Response
+    {
+        $title = 'Admin Voiture';
+        $button_label = 'Ajouter';
+        $cars = $carRepository->findAll();
+        $car = new Car();
+        $form = $this->createForm(CarType::class, $car);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($car);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_car_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin/car.html.twig', compact('title', 'form', 'cars', 'button_label'));
+    }
+
+    #[Route('/voiture/delete/{id}', name: 'app_admin_car_delete')]
+    public function cDelete(Request $request, Car $car, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $car->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($car);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_admin_car_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/voiture/edit/{id}', name: 'app_admin_car_edit')]
+    public function cEdit(Request $request, Car $car, EntityManagerInterface $entityManager, CarRepository $carRepository): Response
+    {
+        $title = 'Admin Voiture';
+        $button_label = 'Ajouter';
+        $cars = $carRepository->findAll();
+        $form = $this->createForm(CarType::class, $car);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($car);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_car_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin/car.html.twig', compact('title', 'form', 'cars', 'button_label'));
+    }
+
+    #[Route('/adresse', name: 'app_admin_address_index')]
+    public function adresse(Request $request, EntityManagerInterface $entityManager, AddressRepository $addressRepository): Response
+    {
+        $title = 'Admin Adresse';
+        $button_label = 'Ajouter';
+        $adresses = $addressRepository->findAll();
+        $adresse = new Address();
+        $form = $this->createForm(AddressInvoiceType::class, $adresse);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($adresse);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_address_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin/address.html.twig', compact('title', 'form', 'adresses', 'button_label'));
+    }
+
+    #[Route('/adresse/delete/{id}', name: 'app_admin_address_delete')]
+    public function adDelete(Request $request, Address $address, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $address->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($address);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_admin_address_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/adresse/edit/{id}', name: 'app_admin_address_edit')]
+    public function adEdit(Request $request, Address $adresse, EntityManagerInterface $entityManager, AddressRepository $addressRepository): Response
+    {
+        $title = 'Admin Adresse Edit';
+        $button_label = 'Modifier';
+        $adresses = $addressRepository->findAll();
+        $form = $this->createForm(AddressInvoiceType::class, $adresse);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($adresse);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_address_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin/address.html.twig', compact('title', 'form', 'adresses', 'button_label'));
     }
 
 

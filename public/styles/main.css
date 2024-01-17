@@ -161,8 +161,7 @@ header nav .menu-burger-btn:hover {
 .menu-links {
   display: none;
   background-color: #45a7fd;
-  position: fixed;
-  top: 4rem;
+  position: relative;
   width: 100vw;
   z-index: 1000;
   box-shadow: 0px 2px 10px #45a7fd;
@@ -237,9 +236,12 @@ main section table {
   background-color: white;
   width: 100%;
   border: 1px solid #a1bed6;
+  border-collapse: collapse;
 }
 main section table thead {
   background-color: #5fb3fd;
+  position: sticky;
+  top: 0;
 }
 main section table thead tr {
   text-align: center;
@@ -257,24 +259,31 @@ main section table tbody tr:hover {
   background-color: #c4e3fe;
 }
 main section table tbody tr td {
-  padding: 8px 0;
+  white-space: nowrap;
+  padding: 8px 4px;
   cursor: default;
 }
+main section.overflowing {
+  overflow: auto;
+  max-height: 756px;
+}
 main section .banner {
-  height: calc(100vh - 4rem - 100px);
+  height: 100vh;
   width: 100vw;
-  position: absolute;
-  top: 4rem;
+  position: fixed;
+  top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: -1;
 }
 main section .banner .img {
   position: absolute;
   height: 100vh;
   width: 100vw;
+  top: 0;
   z-index: -1;
 }
 main section .banner .img::before {
@@ -285,15 +294,26 @@ main section .banner .img::before {
   right: 0;
   bottom: 0;
   z-index: -1;
-  opacity: 0.3;
-  background: url("https://media.discordapp.net/attachments/818549338027458580/1196403248454709350/UnAXlFk.webp?ex=65b7805a&is=65a50b5a&hm=da20af216fefec7be29179499c71c033e44817e07e9e83d3301cc597e197f4fc&=&format=webp&width=1173&height=670") no-repeat center center;
+  opacity: 0.5;
+  background: url("https://cdn.discordapp.com/attachments/818549338027458580/1196513756470054972/TxeqlSC.png?ex=65b7e745&is=65a57245&hm=f111e37d45f87f98cabccc7fad36d577a51d6a63b99754a4b37786910427e6c4&") no-repeat center center;
   background-size: cover;
 }
-main section .banner .logo-main {
+main section .contenu {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+}
+main section .contenu .logo-main {
   margin-bottom: 50px;
   height: 50%;
 }
-main section .banner .btn-home {
+main section .contenu .btn-home {
   text-decoration: none;
   color: black;
   border: 3px solid #DDD;
@@ -339,6 +359,8 @@ footer {
   color: #FFF;
   background-color: #0267C1;
   height: 100px;
+  position: relative;
+  bottom: 0;
 }
 footer a {
   color: #E8EFF5;

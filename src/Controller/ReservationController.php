@@ -33,8 +33,13 @@ class ReservationController extends AbstractController
     private function codeCookie(Request $request): string
     {
         if (isset($_COOKIE['road'])) {
-            $code_road = $_COOKIE['road'];
-            unset($_COOKIE['road']);
+            if ($_COOKIE['road'] == '') {
+                unset($_COOKIE['road']);
+                $code_road = strtoupper(hash('xxh64', uniqid()));
+            } else {
+                $code_road = $_COOKIE['road'];
+                unset($_COOKIE['road']);
+            }
         } else {
             $code_road = strtoupper(hash('xxh64', uniqid()));
         }
@@ -43,10 +48,11 @@ class ReservationController extends AbstractController
         return $code_road;
     }
 
-    private function codeDel(): string
+    private function codeDel(Request $request): string
     {
         $code_road = $_COOKIE['road'];
         unset($_COOKIE['road']);
+        setcookie('road', '', time() + (60 * 60 * 24 * 3), '/', $request->getHost(), true);
         return $code_road;
     }
 
@@ -83,10 +89,12 @@ class ReservationController extends AbstractController
 
         $verif = $reservationRepository->findOneBy(['code' => strtoupper($code)]);
         if ($verif === null) return $this->redirectToRoute('app_main', [], Response::HTTP_SEE_OTHER);
-        $genre = $verif->getPersonalData()->getGender() == 'Homme' ? 'monsieur' : 'madame';
-        $prenom = $genre . ' ' . $verif->getPersonalData()->getFirstname() . ' ' . $verif->getPersonalData()->getLastname() . '.';
+        $prenom = $verif->getPersonalData()->getFirstname() . '.';
+        $option = $verif->getOption() ? $verif->getOption()->getExtra() : null;
+        $parking = $verif->getParking() != null ? $verif->getParking()->getName() : '';
+        $place = $verif->getPlace() != null ? $verif->getPlace()->getLabel() : '';
 
-        return $this->render('main/resume.html.twig', compact('title', 'verif', 'prenom'));
+        return $this->render('main/resume.html.twig', compact('title', 'verif', 'prenom', 'option', 'parking', 'place'));
     }
 
     //§ ------------------------------------------------------------------------------------------------------------------
@@ -283,9 +291,9 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/paiement', name: 'yeah')]
-    public function yeah(EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
+    public function yeah(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
     {
-        $code = strtoupper($this->codeDel());
+        $code = strtoupper($this->codeDel($request));
         $reservation = $reservationRepository->findOneBy(['code' => $code]);
         $reservation->setDateC(new DateTime('now', new DateTimeZone('Europe/Paris')));
         $entityManager->persist($reservation);

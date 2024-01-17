@@ -27,7 +27,7 @@
 
 <hr>
 
-<section>
+<section class="overflowing">
     <table>
         <thead>
             <tr>
@@ -42,7 +42,7 @@
             {% for place in places %}
             <tr id="{{ place.id }}">
                 <td>{{ place.id }}</td>
-                <td><a href="{{ path('app_admin_airport_index') ~ '#' ~ place.parking.id }}" class="btn-bleu">
+                <td><a href="{{ path('app_admin_parking_index') ~ '#' ~ place.parking.id }}" class="btn-bleu">
                         {{ place.parking.name }}
                     </a></td>
                 <td>{{ place.label }}</td>

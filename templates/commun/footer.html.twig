@@ -1,7 +1,12 @@
 <footer>
     <div class="container">
-        <a href="{{path('app_mentions')}}">Mentions légales</a>
-        <a href="{{path('app_contact')}}">Contact</a>
+        <a href="{{ path('app_mentions') }}">Mentions légales</a>
+        -
+        <a href="{{ path('app_contact') }}">Contact</a>
+        -
+        <a href="{{ asset('/common/roissyparks-app.apk') }}">App Mobile</a>
+        -
+        <a href="{{ asset('/common/roissyparks-app.exe') }}">App Desktop</a>
         <p>&copy;Roissy Parks</p>
     </div>
 </footer>

@@ -26,7 +26,7 @@
 </section>
 
 <hr>
-<section>
+<section class="overflowing">
     <table>
         <thead>
             <tr>
@@ -48,7 +48,11 @@
             <tr id="{{reservation.id}}">
                 <td>{{ reservation.status }}</td>
                 <td>{{ reservation.code }}</td>
-                <td>{{ reservation.personalData.id }}</td>
+                <td>
+                    <a href="{{ path('app_admin_infos_index') ~ '#' ~ reservation.personalData.id }}" class="btn-bleu">
+                        {{ reservation.personalData.id }}
+                    </a>
+                </td>
                 <td>{{ reservation.email }}</td>
                 <td>{{ reservation.dateA ? reservation.dateA | date('Y-m-d H:i') : '' }}</td>
                 <td>{{ reservation.flightA }}</td>
@@ -77,4 +81,19 @@
         </tbody>
     </table>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkbox = document.querySelector('.defcoch');
+        var classA = document.querySelectorAll('.defbloc');
+        var classB = document.querySelector('.defnone');
+
+        checkbox.addEventListener('change', function () {
+            classA.forEach(function (element) {
+                element.style.display = checkbox.checked ? 'block' : 'none';
+            });
+
+            classB.style.display = checkbox.checked ? 'none' : 'block';
+        });
+    });
+</script>
 {% endblock %}

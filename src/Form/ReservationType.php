@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+
 use App\Entity\Airport;
 use App\Entity\Parking;
 use App\Entity\Reservation;
@@ -14,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
+
 class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -21,9 +23,9 @@ class ReservationType extends AbstractType
         $extra = 0;
 
         if (isset($options['extra'])) $extra = $options['extra'];
-        ($extra + 1) % 2 == 0 ? $extra1 = true : $extra1 = false;
-        $extra == 2 || $extra == 3 || $extra == 6 || $extra == 7 ? $extra2 = true : $extra2 = false;
-        $extra >= 4 ? $extra3 = true : $extra3 = false;
+        $extra & 1 ? $extra1 = true : $extra1 = false;
+        $extra & 2 ? $extra2 = true : $extra2 = false;
+        $extra & 4 ? $extra3 = true : $extra3 = false;
 
         $builder
             ->add('email', EmailType::class, [

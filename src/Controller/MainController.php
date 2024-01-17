@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -21,14 +23,12 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig', compact('title'));
     }
 
-
     #[Route('/mentions', name: 'app_mentions')]
     public function mention(): Response
     {
         $title = 'Mentions légales';
         return $this->render('main/mentions.html.twig', compact('title'));
     }
-
 
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request, EntityManagerInterface $entityManager): Response

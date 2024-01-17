@@ -27,29 +27,46 @@ class ApiController extends AbstractController
     //! =================================================== APPELS ====================================================
     //§ ---------------------------------------------------------------------------------------------------------------
 
-    #[Route('/api/reservation/{code}', name: 'api_reservation', methods: ['GET'])]
-    public function getReservationIdByCode(ReservationRepository $repository, string $code): Response
+    #[Route('/reservation/{code}', name: 'api_reservation', methods: ['GET'])]
+    public function getResaDetailsByCode(ReservationRepository $repository, string $code): Response
     {
-        if (strlen($this->clear($code)) !== 16)
+        $cleanedCode = $this->clear($code);
+
+        if (strlen($cleanedCode) !== 16) {
             return new JsonResponse([
                 'success' => false,
-                'error_code' => 403,
+                'status' => 403,
                 'message' => 'Invalid code length'
             ], Response::HTTP_FORBIDDEN);
+        }
 
-        $reservation = $repository->findOneBy(['code' => $this->clear($code)]);
+        $reservation = $repository->findOneBy(['code' => $cleanedCode]);
 
-        if ($reservation === null)
+        if ($reservation === null) {
             return new JsonResponse([
                 'success' => false,
-                'error_code' => 404,
+                'status' => 404,
                 'message' => 'Reservation not found'
             ], Response::HTTP_NOT_FOUND);
+        }
+
+        $reservationDetails = [
+            'id' => $reservation->getId(),
+            'firstName' => $reservation->getPersonalData()->getFirstname(),
+            'status' => $reservation->getStatus(),
+            'dateA' => $reservation->getDateA(),
+            'flightA' => $reservation->getFlightA(),
+            'dateB' => $reservation->getDateB(),
+            'flightB' => $reservation->getFlightB(),
+            'valet' => $reservation->getOption() ? $reservation->getOption()->getExtra() : null,
+            'parking' => $reservation->getParking() ? $reservation->getParking()->getName() : null,
+            'place' => $reservation->getPlace() ? $reservation->getPlace()->getLabel() : null,
+        ];
 
         return new JsonResponse([
             'success' => true,
-            'error_code' => 200,
-            'id' => $reservation->getId()
+            'status' => 200,
+            'reservation' => $reservationDetails
         ], Response::HTTP_OK);
     }
 }

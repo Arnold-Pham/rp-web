@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title == 'Accueil' ? title ~ ' - Roissy Parks' : 'Roissy Parks - ' ~ title }}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<section>
+    {% for message in app.flashes('crud') %}
+    <div class="msg-y">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="msg-n">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, { 'attr': {'class': 'form-style'} }) }}
+    {{ form_widget(form) }}
+    <div class="flex">
+        <button class="btn-main">{{ button_label|default('Ajouter') }}</button>
+    </div>
+    {{ form_end(form) }}
+</section>
+
+<hr>
+
+<section class="overflowing">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Réservation</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Color</th>
+                <th>Plate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr id="{{ car.id }}">
+                <td>{{ car.id }}</td>
+                <td><a href="{{ path('app_admin_resa_index') ~ '#' ~ car.personalData.id }}" class="btn-bleu">
+                        {{ car.personalData.id }}
+                    </a></td>
+                <td>{{ car.brand }}</td>
+                <td>{{ car.model }}</td>
+                <td>
+                    <div style="background-color: {{ car.color }}; height:30px;"></div>
+                </td>
+                <td>{{ car.plate }}</td>
+                <td>
+                    <div class="flex center">
+                        <a class="btn-bleu" href="{{ path('app_admin_car_edit', {'id': car.id}) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form method="POST" action="{{ path('app_admin_car_delete', {'id': car.id}) }}"
+                            onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet élémént ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ car.id) }}">
+                            <button class="btn-rouge"><i class="bi bi-trash3-fill"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

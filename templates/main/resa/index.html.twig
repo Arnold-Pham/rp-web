@@ -8,7 +8,7 @@
 <section>
     {{ form_start(form)}}
     {{ form_widget(form)}}
-    <button type="submit">Envoyer</button>
+    <button class="btn-bleu">{{ button_label|default('Envoyer') }}</button>
     {{ form_end(form)}}
 </section>
 

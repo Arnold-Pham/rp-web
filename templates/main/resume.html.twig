@@ -19,12 +19,41 @@
 </section>
 
 <section>
-    <p>Bonjour, {{ prenom }}</p>
+    <p>Bonjour {{ prenom }}</p>
     <p>Voici le récapitulatif de votre réservation chez RoissyParks. Pour toute correction ou tout changement, merci de
         bien vouloir contacter le service client.</p>
-    <div>
-        <p>
-            Status de la réservation:
+    <div class="rounded w-50 py-3 text-center m-auto mb-3 voyage border border-3">
+        <div class="px-3">
+            {% if option != null %}
+            <h2>Option:</h2>
+            {% if option == 0 %}
+            Vous avez choisi l'option voiturier sans services suplémentaires.
+            {% elseif option == 1 or option == 2 or option == 4 %}
+            Vous avez choisi l'option voiturier avec le service suivant:
+            {% else %}
+            Vous avez choisi l'option voiturier avec les services suivants:
+            {% endif %}
+            <ul>
+                {% if option == 1 or option == 3 or option == 5 or option == 7 %}
+                <li>"Nettoyage Intérieur"</li>
+                {% endif %}
+                {% if option == 2 or option == 3 or option == 6 or option == 7 %}
+                <li>"Nettoyage Exterieur"</li>
+                {% endif %}
+                {% if option == 4 or option == 5 or option == 6 or option == 7 %}
+                <li>"Plein d'Essence"</li>
+                {% endif %}
+            </ul>
+            {% else %}
+            <h2>Parking:</h2>
+            Parking: {{ parking }}
+            <br>
+            Place: {{ place}}
+            {% endif %}
+        </div>
+        <hr>
+        <div class="px-3">
+            <h2>Status de la réservation:</h2>
             {% if verif.status == 'Awaiting' %}
             <span class="bg-warning">En attente</span>
             {% elseif verif.status == 'Done' %}
@@ -32,21 +61,27 @@
             {% elseif verif.status == 'Canceled' %}
             <span class="bg-danger">Annulée</span>
             {% endif %}
-        </p>
-    </div>
-    <div class="rounded w-50 py-3 text-center m-auto mb-3 voyage border border-3">
-        <div class="px-3">
-            <h2>Aller</h2>
-            <p>N° de vol: <a href="https://fr.flightaware.com/live/flight/{{verif.flightA}}">{{ verif.flightA }}</a></p>
-            <p>Date: {{ verif.dateA | date('d/m/Y H:i') }}</p>
         </div>
         <hr>
         <div class="px-3">
-            <h2>Retour</h2>
-            <p>N° de vol: <a href="https://fr.flightaware.com/live/flight/{{verif.flightB}}">{{ verif.flightB }}</a></p>
-            <p>Date: {{ verif.dateB | date('d/m/Y H:i') }}</p>
+            <h2>Aller:</h2>
+            N° de vol:
+            <a href="https://fr.flightaware.com/live/flight/{{verif.flightA}}" target="_blank">
+                {{ verif.flightA }}
+            </a>
+            <br>
+            Date: {{ verif.dateA | date('d/m/Y H:i') }}
+        </div>
+        <hr>
+        <div class="px-3">
+            <h2>Retour:</h2>
+            N° de vol:
+            <a href="https://fr.flightaware.com/live/flight/{{verif.flightB}}" target="_blank">
+                {{ verif.flightB }}
+            </a>
+            <br>
+            Date: {{ verif.dateB | date('d/m/Y H:i') }}
         </div>
     </div>
-    {{ dump(verif) }}
 </section>
 {% endblock %}

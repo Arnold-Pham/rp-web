@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 
+use App\Entity\Place;
 use App\Entity\Reservation;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ParkingRepository;
