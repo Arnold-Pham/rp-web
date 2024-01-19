@@ -125,6 +125,8 @@ header {
                 color: $white;
                 display: flex;
                 flex-direction: column;
+                border-radius: 40px;
+                background-color: lighten($bleu, 20);
             }
 
             a,
@@ -137,7 +139,7 @@ header {
 
                 &:hover {
                     background-color: lighten($bleu, 10);
-                    border-radius: 30px;
+                    border-radius: 40px;
                 }
             }
 

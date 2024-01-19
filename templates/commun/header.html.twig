@@ -39,12 +39,13 @@
     <input type="checkbox" id="burger">
     <div class="menu-links">
         <div class="container">
-            <a href="{{ path('app_reservation') }}">Réservation</a>
+            <a href="{{ path('app_reservation') }}">Réserver</a>
+            <a href="{{ path('verif') }}">Voir Réservation</a>
             <a href="{{ path('app_user_index') }}">Profil</a>
             {% if is_granted('ROLE_ADMIN') %}
             <details>
                 <summary>
-                    Admin
+                    Administration
                 </summary>
                 <a href="{{path('app_admin_user_index')}}">Utilisateur</a>
                 <a href="{{path('app_admin_airport_index')}}">Airport</a>
