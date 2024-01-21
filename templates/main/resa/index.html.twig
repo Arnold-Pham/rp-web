@@ -36,7 +36,7 @@
         var inputEntreprise = document.querySelector('.defnone');
 
         function toggleInputEntreprise() {
-            radioEntreprise.checked ? inputEntreprise.style.display = 'block' : inputEntreprise.style.display = 'none';
+            inputEntreprise.style.display = radioEntreprise.checked ? 'block' : 'none';
         }
 
         radioParticulier.addEventListener('change', toggleInputEntreprise);
